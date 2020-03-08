@@ -18,10 +18,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let response = client
         .get("https://slack.com/api/emoji.list")
         .send()
-        .await?
-        .json::<HashMap<String, String>>()
-        .await?;
+        .await
+        .unwrap_or_else(|error| {
+            let url = error.url().map_or_else(
+                || "URL not found.".to_string(),
+                |url| url.as_str().to_owned(),
+            );
 
-    println!("{:#?}", response);
+            let status = error.status().map_or_else(
+                || "No HTTP status.".to_string(),
+                |status| status.as_str().to_owned(),
+            );
+
+            panic!("API response error: URL: {}, HTTP status: {}", url, status);
+        });
+
+    let response_body = response
+        .json::<HashMap<String, String>>()
+        .await
+        .expect("The response body is not in JSON format or it cannot be properly deserialized.");
+
+    println!("{:#?}", response_body);
     Ok(())
 }
