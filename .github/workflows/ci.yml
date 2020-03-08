@@ -1,0 +1,30 @@
+name: Continuous integration
+
+on: [push]
+
+jobs:
+  clippy_and_test:
+    name: Clippy and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          components: clippy
+          override: true
+
+      - name: cargo clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- -D warnings
+
+      - name: cargo test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
