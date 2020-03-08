@@ -6,7 +6,8 @@ use std::env;
 #[derive(Deserialize, Debug)]
 struct EmojiListResponseSchema {
     ok: bool,
-    emoji: HashMap<String, String>,
+    emoji: Option<HashMap<String, String>>,
+    error: Option<String>,
 }
 
 #[tokio::main]
@@ -45,6 +46,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
         .expect("The response body is not in JSON format or it cannot be properly deserialized.");
 
-    println!("{:#?}", response_body);
+    if response_body.ok {
+        println!("{:#?}", response_body);
+    } else {
+        panic!(
+            "Error is returned from emoji.list API: {}",
+            response_body.error.unwrap()
+        );
+    }
+
     Ok(())
 }
