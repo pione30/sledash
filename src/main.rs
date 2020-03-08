@@ -1,6 +1,13 @@
 use reqwest::{header, Client};
+use serde::Deserialize;
 use std::collections::HashMap;
 use std::env;
+
+#[derive(Deserialize, Debug)]
+struct EmojiListResponseSchema {
+    ok: bool,
+    emoji: HashMap<String, String>,
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -34,7 +41,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         });
 
     let response_body = response
-        .json::<HashMap<String, String>>()
+        .json::<EmojiListResponseSchema>()
         .await
         .expect("The response body is not in JSON format or it cannot be properly deserialized.");
 
