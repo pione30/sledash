@@ -1,5 +1,5 @@
 [package]
-name = "slack-emoji-darkmode-iikanji-shader"
+name = "slack-emoji-darkmode-shader"
 version = "0.1.0"
 authors = ["pione30 <g.pionelish30@gmail.com>"]
 edition = "2018"
