@@ -13,15 +13,20 @@ struct EmojiListResponseSchema {
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let env_key = "SLACK_APP_ACCESS_TOKEN";
-    let token = env::var(env_key).expect("Error fetching SLACK_APP_ACCESS_TOKEN");
+    let token =
+        env::var(env_key).expect("SLACK_APP_ACCESS_TOKEN environment variable should be fetched");
 
     let mut headers = header::HeaderMap::new();
     headers.insert(
         header::AUTHORIZATION,
-        header::HeaderValue::from_str(format!("Bearer {}", token).as_str())?,
+        header::HeaderValue::from_str(format!("Bearer {}", token).as_str())
+            .expect("Bearer token should be a valid header value"),
     );
 
-    let client = Client::builder().default_headers(headers).build()?;
+    let client = Client::builder()
+        .default_headers(headers)
+        .build()
+        .expect("Client should be built");
 
     let response = client
         .get("https://slack.com/api/emoji.list")
@@ -44,14 +49,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let response_body = response
         .json::<EmojiListResponseSchema>()
         .await
-        .expect("The response body is not in JSON format or it cannot be properly deserialized.");
+        .expect("The response body should be in JSON format or be properly deserialized");
 
     if response_body.ok {
         println!("{:#?}", response_body);
     } else {
         panic!(
             "Error is returned from emoji.list API: {}",
-            response_body.error.unwrap()
+            response_body
+                .error
+                .expect("Some error value should be present when the response_body.ok is false")
         );
     }
 
