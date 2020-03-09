@@ -18,10 +18,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut headers = header::HeaderMap::new();
     headers.insert(
         header::AUTHORIZATION,
-        header::HeaderValue::from_str(format!("Bearer {}", token).as_str())?,
+        header::HeaderValue::from_str(format!("Bearer {}", token).as_str())
+            .expect("Bearer token should be a valid header value"),
     );
 
-    let client = Client::builder().default_headers(headers).build()?;
+    let client = Client::builder()
+        .default_headers(headers)
+        .build()
+        .expect("Client should be built");
 
     let response = client
         .get("https://slack.com/api/emoji.list")
@@ -51,7 +55,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     } else {
         panic!(
             "Error is returned from emoji.list API: {}",
-            response_body.error.unwrap()
+            response_body
+                .error
+                .expect("Some error value should be present when the response_body.ok is false")
         );
     }
 
