@@ -13,7 +13,8 @@ struct EmojiListResponseSchema {
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let env_key = "SLACK_APP_ACCESS_TOKEN";
-    let token = env::var(env_key).expect("Error fetching SLACK_APP_ACCESS_TOKEN");
+    let token =
+        env::var(env_key).expect("SLACK_APP_ACCESS_TOKEN environment variable should be fetched");
 
     let mut headers = header::HeaderMap::new();
     headers.insert(
@@ -48,7 +49,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let response_body = response
         .json::<EmojiListResponseSchema>()
         .await
-        .expect("The response body is not in JSON format or it cannot be properly deserialized.");
+        .expect("The response body should be in JSON format or be properly deserialized");
 
     if response_body.ok {
         println!("{:#?}", response_body);
