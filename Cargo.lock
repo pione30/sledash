@@ -474,6 +474,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "magickwand"
+version = "0.1.0"
+
+[[package]]
 name = "magickwand-bindgen"
 version = "0.1.0"
 dependencies = [

@@ -15,5 +15,6 @@ serde_json = "1.0"
 
 [workspace]
 members = [
-    "magickwand-bindgen"
+    "magickwand-bindgen",
+    "magickwand"
 ]
