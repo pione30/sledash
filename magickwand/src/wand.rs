@@ -42,6 +42,22 @@ impl Wand {
         let ptr = unsafe { magickwand_bindgen::NewMagickWand() };
         Wand { ptr }
     }
+
+    pub fn magick_read_image_file(&self, file: &File) {
+        let status = unsafe { magickwand_bindgen::MagickReadImageFile(self.ptr, file.ptr) };
+
+        if status == magickwand_bindgen::MagickBooleanType_MagickFalse {
+            panic!("Magick read image file failed");
+        }
+    }
+
+    pub fn magick_write_image_file(&self, file: &File) {
+        let status = unsafe { magickwand_bindgen::MagickWriteImageFile(self.ptr, file.ptr) };
+
+        if status == magickwand_bindgen::MagickBooleanType_MagickFalse {
+            panic!("Magick write image file failed");
+        }
+    }
 }
 
 impl Default for Wand {
