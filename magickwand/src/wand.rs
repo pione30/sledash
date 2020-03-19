@@ -37,7 +37,7 @@ pub struct Wand {
 }
 
 impl Wand {
-    pub fn new() -> Wand {
+    pub fn new() -> Self {
         magick_wand_genesis();
         let ptr = unsafe { magickwand_bindgen::NewMagickWand() };
         Wand { ptr }
