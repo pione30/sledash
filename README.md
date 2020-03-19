@@ -1,3 +1,9 @@
+## Slack Emoji Darkmode Shader
+
+WIP: The only feature as of now is to fetch emoji lists from your Slack workspace.
+
+Set `SLACK_APP_ACCESS_TOKEN` environment variable to your Slack OAuth Access Token with `emoji:read` scope granted.
+
 ## Requirements
 
 - Clang
