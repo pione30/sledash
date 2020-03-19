@@ -1,5 +1,28 @@
 use magickwand_bindgen;
+
+use std::ffi::CString;
 use std::sync::Once;
+
+pub struct File {
+    ptr: *mut magickwand_bindgen::FILE,
+}
+
+impl File {
+    pub fn new(filename: &str, mode: &str) -> Self {
+        let c_filename = CString::new(filename).expect("Cstring::new filename");
+        let c_mode = CString::new(mode).expect("Cstring::new mode");
+        let ptr = unsafe { magickwand_bindgen::fopen(c_filename.as_ptr(), c_mode.as_ptr()) };
+        File { ptr }
+    }
+}
+
+impl Drop for File {
+    fn drop(&mut self) {
+        unsafe {
+            magickwand_bindgen::fclose(self.ptr);
+        }
+    }
+}
 
 static GENESIS: Once = Once::new();
 
