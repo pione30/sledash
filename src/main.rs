@@ -12,7 +12,7 @@ async fn main() {
     if response.ok {
         println!("{:#?}", response.emoji);
     } else {
-        panic!(
+        eprintln!(
             "Error is returned from emoji.list API: {}",
             response
                 .error
