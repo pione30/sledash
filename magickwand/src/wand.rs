@@ -1,4 +1,11 @@
 use magickwand_bindgen;
+use magickwand_bindgen::{
+    DestroyMagickWand, MagickReadImageFile, MagickWand, MagickWandGenesis, MagickWriteImageFile,
+    NewMagickWand,
+};
+
+use magickwand_bindgen::MagickBooleanType_MagickFalse as MagickFalse;
+// use magickwand_bindgen::MagickBooleanType_MagickTrue as MagickTrue;
 
 use std::ffi::CString;
 use std::sync::Once;
@@ -28,33 +35,33 @@ static GENESIS: Once = Once::new();
 
 fn magick_wand_genesis() {
     GENESIS.call_once(|| unsafe {
-        magickwand_bindgen::MagickWandGenesis();
+        MagickWandGenesis();
     });
 }
 
 pub struct Wand {
-    ptr: *mut magickwand_bindgen::MagickWand,
+    ptr: *mut MagickWand,
 }
 
 impl Wand {
     pub fn new() -> Self {
         magick_wand_genesis();
-        let ptr = unsafe { magickwand_bindgen::NewMagickWand() };
+        let ptr = unsafe { NewMagickWand() };
         Wand { ptr }
     }
 
     pub fn magick_read_image_file(&self, file: &File) {
-        let status = unsafe { magickwand_bindgen::MagickReadImageFile(self.ptr, file.ptr) };
+        let status = unsafe { MagickReadImageFile(self.ptr, file.ptr) };
 
-        if status == magickwand_bindgen::MagickBooleanType_MagickFalse {
+        if status == MagickFalse {
             panic!("Magick read image file failed");
         }
     }
 
     pub fn magick_write_image_file(&self, file: &File) {
-        let status = unsafe { magickwand_bindgen::MagickWriteImageFile(self.ptr, file.ptr) };
+        let status = unsafe { MagickWriteImageFile(self.ptr, file.ptr) };
 
-        if status == magickwand_bindgen::MagickBooleanType_MagickFalse {
+        if status == MagickFalse {
             panic!("Magick write image file failed");
         }
     }
@@ -69,7 +76,7 @@ impl Default for Wand {
 impl Drop for Wand {
     fn drop(&mut self) {
         unsafe {
-            magickwand_bindgen::DestroyMagickWand(self.ptr);
+            DestroyMagickWand(self.ptr);
         }
     }
 }
