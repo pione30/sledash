@@ -76,7 +76,7 @@ impl Default for Wand {
 impl Drop for Wand {
     fn drop(&mut self) {
         unsafe {
-            DestroyMagickWand(self.ptr);
+            self.ptr = DestroyMagickWand(self.ptr);
         }
     }
 }
