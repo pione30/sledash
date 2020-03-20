@@ -1,7 +1,7 @@
 use magickwand_bindgen;
 use magickwand_bindgen::{
-    DestroyMagickWand, MagickReadImageFile, MagickWand, MagickWandGenesis, MagickWandTerminus,
-    MagickWriteImageFile, NewMagickWand,
+    DestroyMagickWand, MagickReadImageFile, MagickResetIterator, MagickWand, MagickWandGenesis,
+    MagickWandTerminus, MagickWriteImageFile, NewMagickWand,
 };
 
 use magickwand_bindgen::MagickBooleanType_MagickFalse as MagickFalse;
@@ -55,6 +55,12 @@ impl Wand {
         magick_wand_genesis();
         let ptr = unsafe { NewMagickWand() };
         Wand { ptr }
+    }
+
+    pub fn magick_reset_iterator(&self) {
+        unsafe {
+            MagickResetIterator(self.ptr);
+        }
     }
 
     pub fn magick_read_image_file(&self, file: &File) {
