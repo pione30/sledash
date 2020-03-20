@@ -1,7 +1,7 @@
 use magickwand_bindgen;
 use magickwand_bindgen::{
-    DestroyMagickWand, MagickReadImageFile, MagickWand, MagickWandGenesis, MagickWriteImageFile,
-    NewMagickWand,
+    DestroyMagickWand, MagickReadImageFile, MagickWand, MagickWandGenesis, MagickWandTerminus,
+    MagickWriteImageFile, NewMagickWand,
 };
 
 use magickwand_bindgen::MagickBooleanType_MagickFalse as MagickFalse;
@@ -37,6 +37,13 @@ fn magick_wand_genesis() {
     GENESIS.call_once(|| unsafe {
         MagickWandGenesis();
     });
+}
+
+// TODO: automatically called after the all of Wand resources are dropped
+pub fn magick_wand_terminus() {
+    unsafe {
+        MagickWandTerminus();
+    }
 }
 
 pub struct Wand {
