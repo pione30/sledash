@@ -1,9 +1,4 @@
 use magickwand_bindgen;
-use magickwand_bindgen::{
-    DestroyMagickWand, MagickReadImageFile, MagickResetIterator, MagickWand, MagickWandGenesis,
-    MagickWandTerminus, MagickWriteImageFile, NewMagickWand,
-};
-
 use magickwand_bindgen::MagickBooleanType_MagickFalse as MagickFalse;
 // use magickwand_bindgen::MagickBooleanType_MagickTrue as MagickTrue;
 
@@ -35,36 +30,36 @@ static GENESIS: Once = Once::new();
 
 fn magick_wand_genesis() {
     GENESIS.call_once(|| unsafe {
-        MagickWandGenesis();
+        magickwand_bindgen::MagickWandGenesis();
     });
 }
 
 // TODO: automatically called after the all of Wand resources are dropped
 pub fn magick_wand_terminus() {
     unsafe {
-        MagickWandTerminus();
+        magickwand_bindgen::MagickWandTerminus();
     }
 }
 
 pub struct Wand {
-    ptr: *mut MagickWand,
+    ptr: *mut magickwand_bindgen::MagickWand,
 }
 
 impl Wand {
     pub fn new() -> Self {
         magick_wand_genesis();
-        let ptr = unsafe { NewMagickWand() };
+        let ptr = unsafe { magickwand_bindgen::NewMagickWand() };
         Wand { ptr }
     }
 
     pub fn magick_reset_iterator(&self) {
         unsafe {
-            MagickResetIterator(self.ptr);
+            magickwand_bindgen::MagickResetIterator(self.ptr);
         }
     }
 
     pub fn magick_read_image_file(&self, file: &File) {
-        let status = unsafe { MagickReadImageFile(self.ptr, file.ptr) };
+        let status = unsafe { magickwand_bindgen::MagickReadImageFile(self.ptr, file.ptr) };
 
         if status == MagickFalse {
             panic!("Magick read image file failed");
@@ -72,7 +67,7 @@ impl Wand {
     }
 
     pub fn magick_write_image_file(&self, file: &File) {
-        let status = unsafe { MagickWriteImageFile(self.ptr, file.ptr) };
+        let status = unsafe { magickwand_bindgen::MagickWriteImageFile(self.ptr, file.ptr) };
 
         if status == MagickFalse {
             panic!("Magick write image file failed");
@@ -89,7 +84,7 @@ impl Default for Wand {
 impl Drop for Wand {
     fn drop(&mut self) {
         unsafe {
-            self.ptr = DestroyMagickWand(self.ptr);
+            self.ptr = magickwand_bindgen::DestroyMagickWand(self.ptr);
         }
     }
 }
