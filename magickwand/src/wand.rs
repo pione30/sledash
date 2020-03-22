@@ -52,6 +52,10 @@ impl Wand {
         Wand { ptr }
     }
 
+    pub fn clear_magick_wand(&self) {
+        unsafe { magickwand_bindgen::ClearMagickWand(self.ptr) };
+    }
+
     pub fn magick_reset_iterator(&self) {
         unsafe {
             magickwand_bindgen::MagickResetIterator(self.ptr);
