@@ -33,7 +33,7 @@ async fn main() {
     }
 
     // wand to be taken by all the MagickWandy APIs
-    // let wand = magickwand::Wand::new();
+    let wand = magickwand::Wand::new();
 
     // HTTP request client
     let client = reqwest::Client::new();
@@ -94,16 +94,18 @@ async fn main() {
             continue;
         }
 
-        // wand.magick_read_image_file();
-        // wand.magick_reset_iterator();
+        {
+            let input_emoji = magickwand::File::new(&emoji_save_path.to_string_lossy(), "rb");
+            wand.magick_read_image_file(&input_emoji);
+            wand.magick_reset_iterator();
+        }
 
-        // let output_emoji = magickwand::File::new(
-        //     &emoji_filename,
-        //     "wb",
-        // );
-        // wand.magick_write_image_file(&output_emoji);
-        // wand.magick_reset_iterator();
+        {
+            let output_emoji = magickwand::File::new(&emoji_save_path.to_string_lossy(), "wb");
+            wand.magick_write_image_file(&output_emoji);
+        }
+
+        wand.clear_magick_wand();
     }
-
     // magickwand::magick_wand_terminus();
 }
