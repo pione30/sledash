@@ -52,6 +52,12 @@ fn main() {
         bindgen_builder = bindgen_builder.clang_arg(format!("-I{}", include_path.display()));
     }
 
+    for (macro_name, value) in &wand_config.defines {
+        if let Some(value) = value {
+            bindgen_builder = bindgen_builder.clang_arg(format!("-D{}={}", macro_name, value));
+        }
+    }
+
     let bindings = bindgen_builder
         .generate()
         .expect("Unable to generate MagickWand bindings");
