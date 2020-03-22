@@ -116,4 +116,6 @@ async fn main() {
         wand.clear_magick_wand();
     }
     // magickwand::magick_wand_terminus();
+
+    println!("emojis are saved under {} directory.", emoji_save_directory);
 }
