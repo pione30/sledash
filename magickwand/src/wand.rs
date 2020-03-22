@@ -77,6 +77,14 @@ impl Wand {
             panic!("Magick write image file failed");
         }
     }
+
+    pub fn magick_write_images_file(&self, file: &File) {
+        let status = unsafe { magickwand_bindgen::MagickWriteImagesFile(self.ptr, file.ptr) };
+
+        if status == MagickFalse {
+            panic!("Magick write images file failed");
+        }
+    }
 }
 
 impl Default for Wand {

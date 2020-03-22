@@ -102,7 +102,8 @@ async fn main() {
 
         {
             let output_emoji = magickwand::File::new(&emoji_save_path.to_string_lossy(), "wb");
-            wand.magick_write_image_file(&output_emoji);
+            // *images* to deal with gif animations
+            wand.magick_write_images_file(&output_emoji);
         }
 
         wand.clear_magick_wand();
