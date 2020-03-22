@@ -11,8 +11,15 @@ mod emoji_list;
 #[tokio::main]
 async fn main() {
     let env_key = "SLACK_APP_ACCESS_TOKEN";
-    let token =
-        env::var(env_key).expect("SLACK_APP_ACCESS_TOKEN environment variable should be fetched");
+    let token = env::var(env_key);
+    if let Err(error) = token {
+        eprintln!(
+            "Failed to fetch SLACK_APP_ACCESS_TOKEN environment variable: {}",
+            error
+        );
+        return;
+    }
+    let token = token.unwrap();
 
     // create directory to save emoji
     let emoji_save_directory = "slack_emoji";
