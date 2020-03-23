@@ -5,6 +5,8 @@ use magickwand_bindgen::MagickBooleanType_MagickFalse as MagickFalse;
 use std::ffi::CString;
 use std::sync::Once;
 
+use crate::error;
+
 pub struct File {
     ptr: *mut magickwand_bindgen::FILE,
 }
@@ -62,28 +64,39 @@ impl Wand {
         }
     }
 
-    pub fn magick_read_image_file(&self, file: &File) {
+    pub fn magick_read_image_file(&self, file: &File) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickReadImageFile(self.ptr, file.ptr) };
 
         if status == MagickFalse {
-            panic!("Magick read image file failed");
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
         }
     }
 
-    pub fn magick_write_image_file(&self, file: &File) {
+    pub fn magick_write_image_file(&self, file: &File) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickWriteImageFile(self.ptr, file.ptr) };
 
         if status == MagickFalse {
-            panic!("Magick write image file failed");
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
         }
     }
 
-    pub fn magick_write_images_file(&self, file: &File) {
+    pub fn magick_write_images_file(&self, file: &File) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickWriteImagesFile(self.ptr, file.ptr) };
 
         if status == MagickFalse {
-            panic!("Magick write images file failed");
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
         }
+    }
+
+    fn magick_get_exception_type(&self) -> error::ExceptionType {
+        let exception_type = unsafe { magickwand_bindgen::MagickGetExceptionType(self.ptr) };
+        error::get_exception_type(exception_type)
     }
 }
 
