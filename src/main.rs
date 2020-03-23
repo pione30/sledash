@@ -103,14 +103,27 @@ async fn main() {
 
         {
             let input_emoji = magickwand::File::new(&emoji_save_path.to_string_lossy(), "rb");
-            wand.magick_read_image_file(&input_emoji);
+
+            if let Err(exception_type) = wand.magick_read_image_file(&input_emoji) {
+                eprintln!(
+                    "magick_read_image_file {} failed:",
+                    &emoji_save_path.display()
+                );
+                continue;
+            }
             wand.magick_reset_iterator();
         }
 
         {
             let output_emoji = magickwand::File::new(&emoji_save_path.to_string_lossy(), "wb");
             // *images* to deal with gif animations
-            wand.magick_write_images_file(&output_emoji);
+            if let Err(exception_type) = wand.magick_write_images_file(&output_emoji) {
+                eprintln!(
+                    "magick_write_images_file {} failed:",
+                    &emoji_save_path.display()
+                );
+                continue;
+            }
         }
 
         wand.clear_magick_wand();
