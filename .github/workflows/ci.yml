@@ -7,7 +7,7 @@ jobs:
     name: Clippy and test
     runs-on: ubuntu-latest
     env:
-      LLVM_CONFIG_PATH: /usr/bin/llvm-config
+      LLVM_CONFIG_PATH: /usr/lib/llvm-9/bin/llvm-config
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
