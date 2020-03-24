@@ -1,5 +1,7 @@
 use magickwand_bindgen;
+use std::fmt;
 
+#[derive(Debug)]
 pub enum ExceptionType {
     UndefinedException,
     WarningException,
@@ -161,5 +163,26 @@ pub(crate) fn get_exception_type(
         magickwand_bindgen::ExceptionType_ConfigureFatalError => ExceptionType::ConfigureFatalError,
         magickwand_bindgen::ExceptionType_PolicyFatalError => ExceptionType::PolicyFatalError,
         _ => ExceptionType::UndefinedException,
+    }
+}
+
+impl fmt::Display for ExceptionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "ExceptionType::{:?}", self)
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use std::fmt::Write;
+
+    #[test]
+    fn exception_type_displayed() {
+        let exception_type = ExceptionType::WandWarning;
+
+        let mut output = String::new();
+        write!(&mut output, "{}", exception_type).unwrap();
+        assert_eq!(output, "ExceptionType::WandWarning");
     }
 }
