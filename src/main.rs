@@ -106,8 +106,9 @@ async fn main() {
 
             if let Err(exception_type) = wand.magick_read_image_file(&input_emoji) {
                 eprintln!(
-                    "magick_read_image_file {} failed:",
-                    &emoji_save_path.display()
+                    "magick_read_image_file {} failed: {}",
+                    &emoji_save_path.display(),
+                    exception_type
                 );
                 continue;
             }
@@ -119,8 +120,9 @@ async fn main() {
             // *images* to deal with gif animations
             if let Err(exception_type) = wand.magick_write_images_file(&output_emoji) {
                 eprintln!(
-                    "magick_write_images_file {} failed:",
-                    &emoji_save_path.display()
+                    "magick_write_images_file {} failed: {}",
+                    &emoji_save_path.display(),
+                    exception_type
                 );
                 continue;
             }
