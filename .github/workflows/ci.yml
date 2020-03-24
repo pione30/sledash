@@ -10,6 +10,9 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v2
 
+      - name: Install pkg-config
+        run: sudo apt-get install pkg-config
+
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
         with:
