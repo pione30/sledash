@@ -110,6 +110,7 @@ async fn main() {
                     &emoji_save_path.display(),
                     exception_type
                 );
+                wand.clear_magick_wand();
                 continue;
             }
             wand.magick_reset_iterator();
@@ -124,6 +125,7 @@ async fn main() {
                     &emoji_save_path.display(),
                     exception_type
                 );
+                wand.clear_magick_wand();
                 continue;
             }
         }
