@@ -6,6 +6,8 @@ jobs:
   clippy_and_test:
     name: Clippy and test
     runs-on: ubuntu-latest
+    env:
+      LLVM_CONFIG_PATH: /usr/bin/llvm-config
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
