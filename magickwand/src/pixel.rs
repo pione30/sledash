@@ -6,6 +6,10 @@ use std::ffi::CString;
 
 use crate::error;
 
+/// Pixel treats with a concept of *color*.
+///
+/// See [Pixel Wand Methods](https://imagemagick.org/www/api/pixel-wand.php)
+/// documentation for more details.
 pub struct Pixel {
     ptr: *mut magickwand_bindgen::PixelWand,
 }
