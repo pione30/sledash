@@ -7,6 +7,7 @@ use std::sync::Once;
 
 use crate::error;
 
+/// File is an abstraction of FILE in C language.
 pub struct File {
     ptr: *mut magickwand_bindgen::FILE,
 }
@@ -43,6 +44,11 @@ pub fn magick_wand_terminus() {
     }
 }
 
+/// Wand treats with a concept of *image* and provides some associated methods.
+///
+/// See [Magick Wand Methods](https://imagemagick.org/api/magick-wand.php)
+/// and [Magick Wand Image Methods](https://imagemagick.org/api/magick-image.php)
+/// documentation for more details.
 pub struct Wand {
     ptr: *mut magickwand_bindgen::MagickWand,
 }
