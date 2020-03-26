@@ -120,6 +120,28 @@ impl Wand {
         }
     }
 
+    /// Simulates an image shadow.
+    ///
+    /// - `alpha`: percentage transparency.
+    /// - `sigma`: the standard deviation of the Gaussian, in pixels.
+    /// - `x`: the shadow x-offset.
+    /// - `y`: the shadow y-offset.
+    pub fn magick_shadow_image(
+        &self,
+        alpha: f64,
+        sigma: f64,
+        x: std::os::raw::c_long,
+        y: std::os::raw::c_long,
+    ) -> Result<(), error::ExceptionType> {
+        let status = unsafe { magickwand_bindgen::MagickShadowImage(self.ptr, alpha, sigma, x, y) };
+
+        if status == MagickFalse {
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
+        }
+    }
+
     fn magick_get_exception_type(&self) -> error::ExceptionType {
         let exception_type = unsafe { magickwand_bindgen::MagickGetExceptionType(self.ptr) };
         error::get_exception_type(exception_type)
