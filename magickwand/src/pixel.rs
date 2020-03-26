@@ -35,6 +35,11 @@ impl Pixel {
         }
     }
 
+    /// the level of transparency: alpha 1.0 is fully opaque and 0.0 is fully transparent.
+    pub fn pixel_set_alpha(&self, alpha: f64) {
+        unsafe { magickwand_bindgen::PixelSetAlpha(self.ptr, alpha) };
+    }
+
     fn pixel_get_exception_type(&self) -> error::ExceptionType {
         let exception_type = unsafe { magickwand_bindgen::PixelGetExceptionType(self.ptr) };
         error::get_exception_type(exception_type)
