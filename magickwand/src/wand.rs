@@ -6,6 +6,7 @@ use std::ffi::CString;
 use std::sync::Once;
 
 use crate::error;
+use crate::pixel;
 
 /// File is an abstraction of FILE in C language.
 pub struct File {
@@ -97,6 +98,20 @@ impl Wand {
 
     pub fn magick_write_images_file(&self, file: &File) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickWriteImagesFile(self.ptr, file.ptr) };
+
+        if status == MagickFalse {
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
+        }
+    }
+
+    pub fn magick_set_image_background_color(
+        &self,
+        pixel: &pixel::Pixel,
+    ) -> Result<(), error::ExceptionType> {
+        let status =
+            unsafe { magickwand_bindgen::MagickSetImageBackgroundColor(self.ptr, pixel.ptr) };
 
         if status == MagickFalse {
             Err(self.magick_get_exception_type())

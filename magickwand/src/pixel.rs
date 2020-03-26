@@ -11,7 +11,7 @@ use crate::error;
 /// See [Pixel Wand Methods](https://imagemagick.org/www/api/pixel-wand.php)
 /// documentation for more details.
 pub struct Pixel {
-    ptr: *mut magickwand_bindgen::PixelWand,
+    pub(crate) ptr: *mut magickwand_bindgen::PixelWand,
 }
 
 impl Pixel {
