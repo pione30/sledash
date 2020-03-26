@@ -60,6 +60,11 @@ impl Wand {
         Wand { ptr }
     }
 
+    pub fn clone_magick_wand(&self) -> Self {
+        let ptr = unsafe { magickwand_bindgen::CloneMagickWand(self.ptr) };
+        Wand { ptr }
+    }
+
     pub fn clear_magick_wand(&self) {
         unsafe { magickwand_bindgen::ClearMagickWand(self.ptr) };
     }
