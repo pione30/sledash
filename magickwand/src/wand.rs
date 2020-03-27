@@ -5,6 +5,7 @@ use magickwand_bindgen::MagickBooleanType_MagickFalse as MagickFalse;
 use std::ffi::CString;
 use std::sync::Once;
 
+use crate::enums;
 use crate::error;
 use crate::pixel;
 
@@ -134,6 +135,24 @@ impl Wand {
         y: std::os::raw::c_long,
     ) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickShadowImage(self.ptr, alpha, sigma, x, y) };
+
+        if status == MagickFalse {
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
+        }
+    }
+
+    pub fn magick_composite_image(
+        &self,
+        source: &Wand,
+        operator: enums::CompositeOperator,
+        x: std::os::raw::c_long,
+        y: std::os::raw::c_long,
+    ) -> Result<(), error::ExceptionType> {
+        let status = unsafe {
+            magickwand_bindgen::MagickCompositeImage(self.ptr, source.ptr, operator.into(), x, y)
+        };
 
         if status == MagickFalse {
             Err(self.magick_get_exception_type())
