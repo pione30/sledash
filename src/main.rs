@@ -149,6 +149,18 @@ async fn main() {
                 continue 'emoji;
             }
 
+            if let Err(exception_type) =
+                wand.magick_set_image_gravity(magickwand::GravityType::CenterGravity)
+            {
+                eprintln!(
+                    "magick_set_image_gravity {} failed: {}",
+                    &emoji_save_path.display(),
+                    exception_type
+                );
+                wand.clear_magick_wand();
+                continue 'emoji;
+            }
+
             if let Err(exception_type) = wand.magick_composite_image(
                 &shadow_clone,
                 magickwand::CompositeOperator::DstOverCompositeOp,
