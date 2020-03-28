@@ -146,6 +146,15 @@ async fn main() {
                 continue 'emoji;
             }
 
+            if let Err(exception_type) = shadow_clone.magick_reset_image_page("") {
+                eprintln!(
+                    "magick_reset_image_page {} failed: {}",
+                    &emoji_save_path.display(),
+                    exception_type
+                );
+                continue 'emoji;
+            }
+
             if let Err(exception_type) =
                 wand.magick_set_image_gravity(magickwand::GravityType::CenterGravity)
             {
