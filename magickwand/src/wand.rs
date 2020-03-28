@@ -203,6 +203,7 @@ impl Default for Wand {
 impl Drop for Wand {
     fn drop(&mut self) {
         unsafe {
+            magickwand_bindgen::ClearMagickWand(self.ptr);
             self.ptr = magickwand_bindgen::DestroyMagickWand(self.ptr);
         }
     }

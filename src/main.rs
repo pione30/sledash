@@ -39,9 +39,6 @@ async fn main() {
         return;
     }
 
-    // wand to be taken by all the MagickWandy APIs
-    let mut wand = magickwand::Wand::new();
-
     // Pixel set its color to white
     let mut pixel_white = magickwand::Pixel::new();
     if let Err(exception_type) = pixel_white.pixel_set_color("white") {
@@ -108,6 +105,9 @@ async fn main() {
             continue;
         }
 
+        // wand to be taken by all the MagickWandy APIs
+        let mut wand = magickwand::Wand::new();
+
         {
             let mut input_emoji = magickwand::File::new(&emoji_save_path.to_string_lossy(), "rb");
 
@@ -117,7 +117,6 @@ async fn main() {
                     &emoji_save_path.display(),
                     exception_type
                 );
-                wand.clear_magick_wand();
                 continue;
             }
         }
@@ -135,7 +134,6 @@ async fn main() {
                     &emoji_save_path.display(),
                     exception_type
                 );
-                wand.clear_magick_wand();
                 continue 'emoji;
             }
 
@@ -145,7 +143,6 @@ async fn main() {
                     &emoji_save_path.display(),
                     exception_type
                 );
-                wand.clear_magick_wand();
                 continue 'emoji;
             }
 
@@ -157,7 +154,6 @@ async fn main() {
                     &emoji_save_path.display(),
                     exception_type
                 );
-                wand.clear_magick_wand();
                 continue 'emoji;
             }
 
@@ -172,7 +168,6 @@ async fn main() {
                     &emoji_save_path.display(),
                     exception_type
                 );
-                wand.clear_magick_wand();
                 continue 'emoji;
             }
         }
@@ -186,12 +181,9 @@ async fn main() {
                     &emoji_save_path.display(),
                     exception_type
                 );
-                wand.clear_magick_wand();
                 continue;
             }
         }
-
-        wand.clear_magick_wand();
     }
     // magickwand::magick_wand_terminus();
 
