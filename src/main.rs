@@ -40,7 +40,7 @@ async fn main() {
     }
 
     // wand to be taken by all the MagickWandy APIs
-    let wand = magickwand::Wand::new();
+    let mut wand = magickwand::Wand::new();
 
     // HTTP request client
     let client = reqwest::Client::new();
@@ -102,9 +102,9 @@ async fn main() {
         }
 
         {
-            let input_emoji = magickwand::File::new(&emoji_save_path.to_string_lossy(), "rb");
+            let mut input_emoji = magickwand::File::new(&emoji_save_path.to_string_lossy(), "rb");
 
-            if let Err(exception_type) = wand.magick_read_image_file(&input_emoji) {
+            if let Err(exception_type) = wand.magick_read_image_file(&mut input_emoji) {
                 eprintln!(
                     "magick_read_image_file {} failed: {}",
                     &emoji_save_path.display(),
@@ -117,9 +117,9 @@ async fn main() {
         }
 
         {
-            let output_emoji = magickwand::File::new(&emoji_save_path.to_string_lossy(), "wb");
+            let mut output_emoji = magickwand::File::new(&emoji_save_path.to_string_lossy(), "wb");
             // *images* to deal with gif animations
-            if let Err(exception_type) = wand.magick_write_images_file(&output_emoji) {
+            if let Err(exception_type) = wand.magick_write_images_file(&mut output_emoji) {
                 eprintln!(
                     "magick_write_images_file {} failed: {}",
                     &emoji_save_path.display(),
