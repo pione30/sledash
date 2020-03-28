@@ -42,10 +42,17 @@ async fn main() {
     // wand to be taken by all the MagickWandy APIs
     let mut wand = magickwand::Wand::new();
 
+    // Pixel set its color to white
+    let mut pixel_white = magickwand::Pixel::new();
+    if let Err(exception_type) = pixel_white.pixel_set_color("white") {
+        eprintln!("Failed to set Pixel to white: {}", exception_type);
+        return;
+    }
+
     // HTTP request client
     let client = reqwest::Client::new();
 
-    for (emoji_name, emoji_url) in &response
+    'emoji: for (emoji_name, emoji_url) in &response
         .emoji
         .expect("emoji hash should exist when response.ok is true")
     {
@@ -113,7 +120,49 @@ async fn main() {
                 wand.clear_magick_wand();
                 continue;
             }
-            wand.magick_reset_iterator();
+        }
+
+        wand.magick_reset_iterator();
+        while wand.magick_next_image().is_some() {
+            // use for shadowing the clone of the original emoji
+            let mut shadow_clone = wand.clone_magick_wand();
+
+            if let Err(exception_type) =
+                shadow_clone.magick_set_image_background_color(&pixel_white)
+            {
+                eprintln!(
+                    "magick_set_image_background_color to white {} failed: {}",
+                    &emoji_save_path.display(),
+                    exception_type
+                );
+                wand.clear_magick_wand();
+                continue 'emoji;
+            }
+
+            if let Err(exception_type) = shadow_clone.magick_shadow_image(100.0, 8.0, 0, 0) {
+                eprintln!(
+                    "magick_shadow_image {} failed: {}",
+                    &emoji_save_path.display(),
+                    exception_type
+                );
+                wand.clear_magick_wand();
+                continue 'emoji;
+            }
+
+            if let Err(exception_type) = wand.magick_composite_image(
+                &shadow_clone,
+                magickwand::CompositeOperator::DstOverCompositeOp,
+                0,
+                0,
+            ) {
+                eprintln!(
+                    "magick_composite_image {} failed: {}",
+                    &emoji_save_path.display(),
+                    exception_type
+                );
+                wand.clear_magick_wand();
+                continue 'emoji;
+            }
         }
 
         {
