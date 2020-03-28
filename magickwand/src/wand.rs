@@ -1,6 +1,6 @@
 use magickwand_bindgen;
 use magickwand_bindgen::MagickBooleanType_MagickFalse as MagickFalse;
-// use magickwand_bindgen::MagickBooleanType_MagickTrue as MagickTrue;
+use magickwand_bindgen::MagickBooleanType_MagickTrue as MagickTrue;
 
 use std::ffi::CString;
 use std::sync::Once;
@@ -77,6 +77,16 @@ impl Wand {
         }
     }
 
+    pub fn magick_next_image(&mut self) -> Option<()> {
+        let has_next = unsafe { magickwand_bindgen::MagickNextImage(self.ptr) };
+
+        if has_next == MagickTrue {
+            Some(())
+        } else {
+            None
+        }
+    }
+
     pub fn magick_read_image_file(&mut self, file: &mut File) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickReadImageFile(self.ptr, file.ptr) };
 
@@ -110,12 +120,54 @@ impl Wand {
         }
     }
 
+    pub fn magick_resize_image(
+        &mut self,
+        columns: std::os::raw::c_ulong,
+        rows: std::os::raw::c_ulong,
+        filter: enums::FilterTypes,
+    ) -> Result<(), error::ExceptionType> {
+        let status = unsafe {
+            magickwand_bindgen::MagickResizeImage(self.ptr, columns, rows, filter.into(), 1.0)
+        };
+
+        if status == MagickFalse {
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
+        }
+    }
+
+    pub fn magick_set_image_gravity(
+        &self,
+        gravity_type: enums::GravityType,
+    ) -> Result<(), error::ExceptionType> {
+        let status =
+            unsafe { magickwand_bindgen::MagickSetImageGravity(self.ptr, gravity_type.into()) };
+
+        if status == MagickFalse {
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
+        }
+    }
+
     pub fn magick_set_image_background_color(
         &mut self,
         pixel: &pixel::Pixel,
     ) -> Result<(), error::ExceptionType> {
         let status =
             unsafe { magickwand_bindgen::MagickSetImageBackgroundColor(self.ptr, pixel.ptr) };
+
+        if status == MagickFalse {
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
+        }
+    }
+
+    pub fn magick_reset_image_page(&mut self, page: &str) -> Result<(), error::ExceptionType> {
+        let c_page = CString::new(page).expect("CString::new(page) should be created");
+        let status = unsafe { magickwand_bindgen::MagickResetImagePage(self.ptr, c_page.as_ptr()) };
 
         if status == MagickFalse {
             Err(self.magick_get_exception_type())
@@ -179,6 +231,7 @@ impl Default for Wand {
 impl Drop for Wand {
     fn drop(&mut self) {
         unsafe {
+            magickwand_bindgen::ClearMagickWand(self.ptr);
             self.ptr = magickwand_bindgen::DestroyMagickWand(self.ptr);
         }
     }

@@ -281,3 +281,111 @@ impl Into<magickwand_bindgen::CompositeOperator> for CompositeOperator {
         }
     }
 }
+
+pub enum GravityType {
+    UndefinedGravity,
+    ForgetGravity,
+    NorthWestGravity,
+    NorthGravity,
+    NorthEastGravity,
+    WestGravity,
+    CenterGravity,
+    EastGravity,
+    SouthWestGravity,
+    SouthGravity,
+    SouthEastGravity,
+    StaticGravity,
+}
+
+impl Into<magickwand_bindgen::GravityType> for GravityType {
+    fn into(self) -> magickwand_bindgen::GravityType {
+        match self {
+            GravityType::UndefinedGravity => magickwand_bindgen::GravityType_UndefinedGravity,
+            GravityType::ForgetGravity => magickwand_bindgen::GravityType_ForgetGravity,
+            GravityType::NorthWestGravity => magickwand_bindgen::GravityType_NorthWestGravity,
+            GravityType::NorthGravity => magickwand_bindgen::GravityType_NorthGravity,
+            GravityType::NorthEastGravity => magickwand_bindgen::GravityType_NorthEastGravity,
+            GravityType::WestGravity => magickwand_bindgen::GravityType_WestGravity,
+            GravityType::CenterGravity => magickwand_bindgen::GravityType_CenterGravity,
+            GravityType::EastGravity => magickwand_bindgen::GravityType_EastGravity,
+            GravityType::SouthWestGravity => magickwand_bindgen::GravityType_SouthWestGravity,
+            GravityType::SouthGravity => magickwand_bindgen::GravityType_SouthGravity,
+            GravityType::SouthEastGravity => magickwand_bindgen::GravityType_SouthEastGravity,
+            GravityType::StaticGravity => magickwand_bindgen::GravityType_StaticGravity,
+        }
+    }
+}
+
+pub enum FilterTypes {
+    UndefinedFilter,
+    PointFilter,
+    BoxFilter,
+    TriangleFilter,
+    HermiteFilter,
+    HanningFilter,
+    HammingFilter,
+    BlackmanFilter,
+    GaussianFilter,
+    QuadraticFilter,
+    CubicFilter,
+    CatromFilter,
+    MitchellFilter,
+    JincFilter,
+    SincFilter,
+    SincFastFilter,
+    KaiserFilter,
+    WelshFilter,
+    ParzenFilter,
+    BohmanFilter,
+    BartlettFilter,
+    LagrangeFilter,
+    LanczosFilter,
+    LanczosSharpFilter,
+    Lanczos2Filter,
+    Lanczos2SharpFilter,
+    RobidouxFilter,
+    RobidouxSharpFilter,
+    CosineFilter,
+    SplineFilter,
+    LanczosRadiusFilter,
+    SentinelFilter,
+}
+
+impl Into<magickwand_bindgen::FilterTypes> for FilterTypes {
+    fn into(self) -> magickwand_bindgen::FilterTypes {
+        match self {
+            FilterTypes::UndefinedFilter => magickwand_bindgen::FilterTypes_UndefinedFilter,
+            FilterTypes::PointFilter => magickwand_bindgen::FilterTypes_PointFilter,
+            FilterTypes::BoxFilter => magickwand_bindgen::FilterTypes_BoxFilter,
+            FilterTypes::TriangleFilter => magickwand_bindgen::FilterTypes_TriangleFilter,
+            FilterTypes::HermiteFilter => magickwand_bindgen::FilterTypes_HermiteFilter,
+            FilterTypes::HanningFilter => magickwand_bindgen::FilterTypes_HanningFilter,
+            FilterTypes::HammingFilter => magickwand_bindgen::FilterTypes_HammingFilter,
+            FilterTypes::BlackmanFilter => magickwand_bindgen::FilterTypes_BlackmanFilter,
+            FilterTypes::GaussianFilter => magickwand_bindgen::FilterTypes_GaussianFilter,
+            FilterTypes::QuadraticFilter => magickwand_bindgen::FilterTypes_QuadraticFilter,
+            FilterTypes::CubicFilter => magickwand_bindgen::FilterTypes_CubicFilter,
+            FilterTypes::CatromFilter => magickwand_bindgen::FilterTypes_CatromFilter,
+            FilterTypes::MitchellFilter => magickwand_bindgen::FilterTypes_MitchellFilter,
+            FilterTypes::JincFilter => magickwand_bindgen::FilterTypes_JincFilter,
+            FilterTypes::SincFilter => magickwand_bindgen::FilterTypes_SincFilter,
+            FilterTypes::SincFastFilter => magickwand_bindgen::FilterTypes_SincFastFilter,
+            FilterTypes::KaiserFilter => magickwand_bindgen::FilterTypes_KaiserFilter,
+            FilterTypes::WelshFilter => magickwand_bindgen::FilterTypes_WelshFilter,
+            FilterTypes::ParzenFilter => magickwand_bindgen::FilterTypes_ParzenFilter,
+            FilterTypes::BohmanFilter => magickwand_bindgen::FilterTypes_BohmanFilter,
+            FilterTypes::BartlettFilter => magickwand_bindgen::FilterTypes_BartlettFilter,
+            FilterTypes::LagrangeFilter => magickwand_bindgen::FilterTypes_LagrangeFilter,
+            FilterTypes::LanczosFilter => magickwand_bindgen::FilterTypes_LanczosFilter,
+            FilterTypes::LanczosSharpFilter => magickwand_bindgen::FilterTypes_LanczosSharpFilter,
+            FilterTypes::Lanczos2Filter => magickwand_bindgen::FilterTypes_Lanczos2Filter,
+            FilterTypes::Lanczos2SharpFilter => magickwand_bindgen::FilterTypes_Lanczos2SharpFilter,
+            FilterTypes::RobidouxFilter => magickwand_bindgen::FilterTypes_RobidouxFilter,
+            FilterTypes::RobidouxSharpFilter => magickwand_bindgen::FilterTypes_RobidouxSharpFilter,
+            FilterTypes::CosineFilter => magickwand_bindgen::FilterTypes_CosineFilter,
+            FilterTypes::SplineFilter => magickwand_bindgen::FilterTypes_SplineFilter,
+            FilterTypes::LanczosRadiusFilter => magickwand_bindgen::FilterTypes_LanczosRadiusFilter,
+            FilterTypes::SentinelFilter => magickwand_bindgen::FilterTypes_SentinelFilter,
+        }
+    }
+}
