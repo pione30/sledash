@@ -281,3 +281,37 @@ impl Into<magickwand_bindgen::CompositeOperator> for CompositeOperator {
         }
     }
 }
+
+pub enum GravityType {
+    UndefinedGravity,
+    ForgetGravity,
+    NorthWestGravity,
+    NorthGravity,
+    NorthEastGravity,
+    WestGravity,
+    CenterGravity,
+    EastGravity,
+    SouthWestGravity,
+    SouthGravity,
+    SouthEastGravity,
+    StaticGravity,
+}
+
+impl Into<magickwand_bindgen::GravityType> for GravityType {
+    fn into(self) -> magickwand_bindgen::GravityType {
+        match self {
+            GravityType::UndefinedGravity => magickwand_bindgen::GravityType_UndefinedGravity,
+            GravityType::ForgetGravity => magickwand_bindgen::GravityType_ForgetGravity,
+            GravityType::NorthWestGravity => magickwand_bindgen::GravityType_NorthWestGravity,
+            GravityType::NorthGravity => magickwand_bindgen::GravityType_NorthGravity,
+            GravityType::NorthEastGravity => magickwand_bindgen::GravityType_NorthEastGravity,
+            GravityType::WestGravity => magickwand_bindgen::GravityType_WestGravity,
+            GravityType::CenterGravity => magickwand_bindgen::GravityType_CenterGravity,
+            GravityType::EastGravity => magickwand_bindgen::GravityType_EastGravity,
+            GravityType::SouthWestGravity => magickwand_bindgen::GravityType_SouthWestGravity,
+            GravityType::SouthGravity => magickwand_bindgen::GravityType_SouthGravity,
+            GravityType::SouthEastGravity => magickwand_bindgen::GravityType_SouthEastGravity,
+            GravityType::StaticGravity => magickwand_bindgen::GravityType_StaticGravity,
+        }
+    }
+}

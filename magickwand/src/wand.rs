@@ -120,6 +120,20 @@ impl Wand {
         }
     }
 
+    pub fn magick_set_image_gravity(
+        &self,
+        gravity_type: enums::GravityType,
+    ) -> Result<(), error::ExceptionType> {
+        let status =
+            unsafe { magickwand_bindgen::MagickSetImageGravity(self.ptr, gravity_type.into()) };
+
+        if status == MagickFalse {
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
+        }
+    }
+
     pub fn magick_set_image_background_color(
         &mut self,
         pixel: &pixel::Pixel,
