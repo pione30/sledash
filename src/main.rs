@@ -84,25 +84,28 @@ async fn main() {
 
         let emoji_filename = format!("{}{}", emoji_name, extension);
         let emoji_save_path = Path::new(emoji_save_directory).join(emoji_filename);
-        let file = std::fs::File::create(&emoji_save_path);
-        if let Err(error) = file {
-            eprintln!(
-                "Failed to create emoji file {}: {}",
-                &emoji_save_path.display(),
-                error
-            );
-            continue;
-        }
-        let mut file = file.unwrap();
 
-        // save emoji bytes
-        if let Err(error) = file.write_all(bytes.as_ref()) {
-            eprintln!(
-                "Failed to write bytes to file {}: {}",
-                &emoji_save_path.display(),
-                error
-            );
-            continue;
+        {
+            let file = std::fs::File::create(&emoji_save_path);
+            if let Err(error) = file {
+                eprintln!(
+                    "Failed to create emoji file {}: {}",
+                    &emoji_save_path.display(),
+                    error
+                );
+                continue;
+            }
+            let mut file = file.unwrap();
+
+            // save emoji bytes
+            if let Err(error) = file.write_all(bytes.as_ref()) {
+                eprintln!(
+                    "Failed to write bytes to file {}: {}",
+                    &emoji_save_path.display(),
+                    error
+                );
+                continue;
+            }
         }
 
         // wand to be taken by all the MagickWandy APIs
