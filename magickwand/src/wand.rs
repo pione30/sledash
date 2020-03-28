@@ -1,6 +1,6 @@
 use magickwand_bindgen;
 use magickwand_bindgen::MagickBooleanType_MagickFalse as MagickFalse;
-// use magickwand_bindgen::MagickBooleanType_MagickTrue as MagickTrue;
+use magickwand_bindgen::MagickBooleanType_MagickTrue as MagickTrue;
 
 use std::ffi::CString;
 use std::sync::Once;
@@ -74,6 +74,16 @@ impl Wand {
     pub fn magick_reset_iterator(&mut self) {
         unsafe {
             magickwand_bindgen::MagickResetIterator(self.ptr);
+        }
+    }
+
+    pub fn magick_next_image(&mut self) -> Option<()> {
+        let has_next = unsafe { magickwand_bindgen::MagickNextImage(self.ptr) };
+
+        if has_next == MagickTrue {
+            Some(())
+        } else {
+            None
         }
     }
 
