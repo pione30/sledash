@@ -120,6 +120,23 @@ impl Wand {
         }
     }
 
+    pub fn magick_resize_image(
+        &mut self,
+        columns: std::os::raw::c_ulong,
+        rows: std::os::raw::c_ulong,
+        filter: enums::FilterTypes,
+    ) -> Result<(), error::ExceptionType> {
+        let status = unsafe {
+            magickwand_bindgen::MagickResizeImage(self.ptr, columns, rows, filter.into(), 1.0)
+        };
+
+        if status == MagickFalse {
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
+        }
+    }
+
     pub fn magick_set_image_gravity(
         &self,
         gravity_type: enums::GravityType,
