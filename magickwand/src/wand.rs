@@ -148,6 +148,17 @@ impl Wand {
         }
     }
 
+    pub fn magick_reset_image_page(&mut self, page: &str) -> Result<(), error::ExceptionType> {
+        let c_page = CString::new(page).expect("CString::new(page) should be created");
+        let status = unsafe { magickwand_bindgen::MagickResetImagePage(self.ptr, c_page.as_ptr()) };
+
+        if status == MagickFalse {
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
+        }
+    }
+
     /// Simulates an image shadow.
     ///
     /// - `alpha`: percentage transparency.
