@@ -20,11 +20,11 @@ impl Pixel {
         Pixel { ptr }
     }
 
-    pub fn clear_pixel_wand(&self) {
+    pub fn clear_pixel_wand(&mut self) {
         unsafe { magickwand_bindgen::ClearPixelWand(self.ptr) };
     }
 
-    pub fn pixel_set_color(&self, color: &str) -> Result<(), error::ExceptionType> {
+    pub fn pixel_set_color(&mut self, color: &str) -> Result<(), error::ExceptionType> {
         let c_color = CString::new(color).expect("CString::new color");
         let status = unsafe { magickwand_bindgen::PixelSetColor(self.ptr, c_color.as_ptr()) };
 
@@ -36,7 +36,7 @@ impl Pixel {
     }
 
     /// the level of transparency: alpha 1.0 is fully opaque and 0.0 is fully transparent.
-    pub fn pixel_set_alpha(&self, alpha: f64) {
+    pub fn pixel_set_alpha(&mut self, alpha: f64) {
         unsafe { magickwand_bindgen::PixelSetAlpha(self.ptr, alpha) };
     }
 

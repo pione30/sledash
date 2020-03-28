@@ -67,17 +67,17 @@ impl Wand {
         Wand { ptr }
     }
 
-    pub fn clear_magick_wand(&self) {
+    pub fn clear_magick_wand(&mut self) {
         unsafe { magickwand_bindgen::ClearMagickWand(self.ptr) };
     }
 
-    pub fn magick_reset_iterator(&self) {
+    pub fn magick_reset_iterator(&mut self) {
         unsafe {
             magickwand_bindgen::MagickResetIterator(self.ptr);
         }
     }
 
-    pub fn magick_read_image_file(&self, file: &File) -> Result<(), error::ExceptionType> {
+    pub fn magick_read_image_file(&mut self, file: &mut File) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickReadImageFile(self.ptr, file.ptr) };
 
         if status == MagickFalse {
@@ -87,7 +87,7 @@ impl Wand {
         }
     }
 
-    pub fn magick_write_image_file(&self, file: &File) -> Result<(), error::ExceptionType> {
+    pub fn magick_write_image_file(&mut self, file: &mut File) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickWriteImageFile(self.ptr, file.ptr) };
 
         if status == MagickFalse {
@@ -97,7 +97,10 @@ impl Wand {
         }
     }
 
-    pub fn magick_write_images_file(&self, file: &File) -> Result<(), error::ExceptionType> {
+    pub fn magick_write_images_file(
+        &mut self,
+        file: &mut File,
+    ) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickWriteImagesFile(self.ptr, file.ptr) };
 
         if status == MagickFalse {
@@ -108,7 +111,7 @@ impl Wand {
     }
 
     pub fn magick_set_image_background_color(
-        &self,
+        &mut self,
         pixel: &pixel::Pixel,
     ) -> Result<(), error::ExceptionType> {
         let status =
@@ -128,7 +131,7 @@ impl Wand {
     /// - `x`: the shadow x-offset.
     /// - `y`: the shadow y-offset.
     pub fn magick_shadow_image(
-        &self,
+        &mut self,
         alpha: f64,
         sigma: f64,
         x: std::os::raw::c_long,
@@ -144,7 +147,7 @@ impl Wand {
     }
 
     pub fn magick_composite_image(
-        &self,
+        &mut self,
         source: &Wand,
         operator: enums::CompositeOperator,
         x: std::os::raw::c_long,
