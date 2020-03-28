@@ -11,7 +11,7 @@ use crate::error;
 /// See [Pixel Wand Methods](https://imagemagick.org/www/api/pixel-wand.php)
 /// documentation for more details.
 pub struct Pixel {
-    ptr: *mut magickwand_bindgen::PixelWand,
+    pub(crate) ptr: *mut magickwand_bindgen::PixelWand,
 }
 
 impl Pixel {
@@ -33,6 +33,11 @@ impl Pixel {
         } else {
             Ok(())
         }
+    }
+
+    /// the level of transparency: alpha 1.0 is fully opaque and 0.0 is fully transparent.
+    pub fn pixel_set_alpha(&self, alpha: f64) {
+        unsafe { magickwand_bindgen::PixelSetAlpha(self.ptr, alpha) };
     }
 
     fn pixel_get_exception_type(&self) -> error::ExceptionType {

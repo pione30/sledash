@@ -1,0 +1,283 @@
+use magickwand_bindgen;
+
+pub enum CompositeOperator {
+    UndefinedCompositeOp,
+    NoCompositeOp,
+    ModulusAddCompositeOp,
+    AtopCompositeOp,
+    BlendCompositeOp,
+    BumpmapCompositeOp,
+    ChangeMaskCompositeOp,
+    ClearCompositeOp,
+    ColorBurnCompositeOp,
+    ColorDodgeCompositeOp,
+    ColorizeCompositeOp,
+    CopyBlackCompositeOp,
+    CopyBlueCompositeOp,
+    CopyCompositeOp,
+    CopyCyanCompositeOp,
+    CopyGreenCompositeOp,
+    CopyMagentaCompositeOp,
+    CopyOpacityCompositeOp,
+    CopyRedCompositeOp,
+    CopyYellowCompositeOp,
+    DarkenCompositeOp,
+    DstAtopCompositeOp,
+    DstCompositeOp,
+    DstInCompositeOp,
+    DstOutCompositeOp,
+    DstOverCompositeOp,
+    DifferenceCompositeOp,
+    DisplaceCompositeOp,
+    DissolveCompositeOp,
+    ExclusionCompositeOp,
+    HardLightCompositeOp,
+    HueCompositeOp,
+    InCompositeOp,
+    LightenCompositeOp,
+    LinearLightCompositeOp,
+    LuminizeCompositeOp,
+    MinusDstCompositeOp,
+    ModulateCompositeOp,
+    MultiplyCompositeOp,
+    OutCompositeOp,
+    OverCompositeOp,
+    OverlayCompositeOp,
+    PlusCompositeOp,
+    ReplaceCompositeOp,
+    SaturateCompositeOp,
+    ScreenCompositeOp,
+    SoftLightCompositeOp,
+    SrcAtopCompositeOp,
+    SrcCompositeOp,
+    SrcInCompositeOp,
+    SrcOutCompositeOp,
+    SrcOverCompositeOp,
+    ModulusSubtractCompositeOp,
+    ThresholdCompositeOp,
+    XorCompositeOp,
+    DivideDstCompositeOp,
+    DistortCompositeOp,
+    BlurCompositeOp,
+    PegtopLightCompositeOp,
+    VividLightCompositeOp,
+    PinLightCompositeOp,
+    LinearDodgeCompositeOp,
+    LinearBurnCompositeOp,
+    MathematicsCompositeOp,
+    DivideSrcCompositeOp,
+    MinusSrcCompositeOp,
+    DarkenIntensityCompositeOp,
+    LightenIntensityCompositeOp,
+    HardMixCompositeOp,
+}
+
+impl Into<magickwand_bindgen::CompositeOperator> for CompositeOperator {
+    fn into(self) -> magickwand_bindgen::CompositeOperator {
+        match self {
+            CompositeOperator::UndefinedCompositeOp => {
+                magickwand_bindgen::CompositeOperator_UndefinedCompositeOp
+            }
+            CompositeOperator::NoCompositeOp => magickwand_bindgen::CompositeOperator_NoCompositeOp,
+            CompositeOperator::ModulusAddCompositeOp => {
+                magickwand_bindgen::CompositeOperator_ModulusAddCompositeOp
+            }
+            CompositeOperator::AtopCompositeOp => {
+                magickwand_bindgen::CompositeOperator_AtopCompositeOp
+            }
+            CompositeOperator::BlendCompositeOp => {
+                magickwand_bindgen::CompositeOperator_BlendCompositeOp
+            }
+            CompositeOperator::BumpmapCompositeOp => {
+                magickwand_bindgen::CompositeOperator_BumpmapCompositeOp
+            }
+            CompositeOperator::ChangeMaskCompositeOp => {
+                magickwand_bindgen::CompositeOperator_ChangeMaskCompositeOp
+            }
+            CompositeOperator::ClearCompositeOp => {
+                magickwand_bindgen::CompositeOperator_ClearCompositeOp
+            }
+            CompositeOperator::ColorBurnCompositeOp => {
+                magickwand_bindgen::CompositeOperator_ColorBurnCompositeOp
+            }
+            CompositeOperator::ColorDodgeCompositeOp => {
+                magickwand_bindgen::CompositeOperator_ColorDodgeCompositeOp
+            }
+            CompositeOperator::ColorizeCompositeOp => {
+                magickwand_bindgen::CompositeOperator_ColorizeCompositeOp
+            }
+            CompositeOperator::CopyBlackCompositeOp => {
+                magickwand_bindgen::CompositeOperator_CopyBlackCompositeOp
+            }
+            CompositeOperator::CopyBlueCompositeOp => {
+                magickwand_bindgen::CompositeOperator_CopyBlueCompositeOp
+            }
+            CompositeOperator::CopyCompositeOp => {
+                magickwand_bindgen::CompositeOperator_CopyCompositeOp
+            }
+            CompositeOperator::CopyCyanCompositeOp => {
+                magickwand_bindgen::CompositeOperator_CopyCyanCompositeOp
+            }
+            CompositeOperator::CopyGreenCompositeOp => {
+                magickwand_bindgen::CompositeOperator_CopyGreenCompositeOp
+            }
+            CompositeOperator::CopyMagentaCompositeOp => {
+                magickwand_bindgen::CompositeOperator_CopyMagentaCompositeOp
+            }
+            CompositeOperator::CopyOpacityCompositeOp => {
+                magickwand_bindgen::CompositeOperator_CopyOpacityCompositeOp
+            }
+            CompositeOperator::CopyRedCompositeOp => {
+                magickwand_bindgen::CompositeOperator_CopyRedCompositeOp
+            }
+            CompositeOperator::CopyYellowCompositeOp => {
+                magickwand_bindgen::CompositeOperator_CopyYellowCompositeOp
+            }
+            CompositeOperator::DarkenCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DarkenCompositeOp
+            }
+            CompositeOperator::DstAtopCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DstAtopCompositeOp
+            }
+            CompositeOperator::DstCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DstCompositeOp
+            }
+            CompositeOperator::DstInCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DstInCompositeOp
+            }
+            CompositeOperator::DstOutCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DstOutCompositeOp
+            }
+            CompositeOperator::DstOverCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DstOverCompositeOp
+            }
+            CompositeOperator::DifferenceCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DifferenceCompositeOp
+            }
+            CompositeOperator::DisplaceCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DisplaceCompositeOp
+            }
+            CompositeOperator::DissolveCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DissolveCompositeOp
+            }
+            CompositeOperator::ExclusionCompositeOp => {
+                magickwand_bindgen::CompositeOperator_ExclusionCompositeOp
+            }
+            CompositeOperator::HardLightCompositeOp => {
+                magickwand_bindgen::CompositeOperator_HardLightCompositeOp
+            }
+            CompositeOperator::HueCompositeOp => {
+                magickwand_bindgen::CompositeOperator_HueCompositeOp
+            }
+            CompositeOperator::InCompositeOp => magickwand_bindgen::CompositeOperator_InCompositeOp,
+            CompositeOperator::LightenCompositeOp => {
+                magickwand_bindgen::CompositeOperator_LightenCompositeOp
+            }
+            CompositeOperator::LinearLightCompositeOp => {
+                magickwand_bindgen::CompositeOperator_LinearLightCompositeOp
+            }
+            CompositeOperator::LuminizeCompositeOp => {
+                magickwand_bindgen::CompositeOperator_LuminizeCompositeOp
+            }
+            CompositeOperator::MinusDstCompositeOp => {
+                magickwand_bindgen::CompositeOperator_MinusDstCompositeOp
+            }
+            CompositeOperator::ModulateCompositeOp => {
+                magickwand_bindgen::CompositeOperator_ModulateCompositeOp
+            }
+            CompositeOperator::MultiplyCompositeOp => {
+                magickwand_bindgen::CompositeOperator_MultiplyCompositeOp
+            }
+            CompositeOperator::OutCompositeOp => {
+                magickwand_bindgen::CompositeOperator_OutCompositeOp
+            }
+            CompositeOperator::OverCompositeOp => {
+                magickwand_bindgen::CompositeOperator_OverCompositeOp
+            }
+            CompositeOperator::OverlayCompositeOp => {
+                magickwand_bindgen::CompositeOperator_OverlayCompositeOp
+            }
+            CompositeOperator::PlusCompositeOp => {
+                magickwand_bindgen::CompositeOperator_PlusCompositeOp
+            }
+            CompositeOperator::ReplaceCompositeOp => {
+                magickwand_bindgen::CompositeOperator_ReplaceCompositeOp
+            }
+            CompositeOperator::SaturateCompositeOp => {
+                magickwand_bindgen::CompositeOperator_SaturateCompositeOp
+            }
+            CompositeOperator::ScreenCompositeOp => {
+                magickwand_bindgen::CompositeOperator_ScreenCompositeOp
+            }
+            CompositeOperator::SoftLightCompositeOp => {
+                magickwand_bindgen::CompositeOperator_SoftLightCompositeOp
+            }
+            CompositeOperator::SrcAtopCompositeOp => {
+                magickwand_bindgen::CompositeOperator_SrcAtopCompositeOp
+            }
+            CompositeOperator::SrcCompositeOp => {
+                magickwand_bindgen::CompositeOperator_SrcCompositeOp
+            }
+            CompositeOperator::SrcInCompositeOp => {
+                magickwand_bindgen::CompositeOperator_SrcInCompositeOp
+            }
+            CompositeOperator::SrcOutCompositeOp => {
+                magickwand_bindgen::CompositeOperator_SrcOutCompositeOp
+            }
+            CompositeOperator::SrcOverCompositeOp => {
+                magickwand_bindgen::CompositeOperator_SrcOverCompositeOp
+            }
+            CompositeOperator::ModulusSubtractCompositeOp => {
+                magickwand_bindgen::CompositeOperator_ModulusSubtractCompositeOp
+            }
+            CompositeOperator::ThresholdCompositeOp => {
+                magickwand_bindgen::CompositeOperator_ThresholdCompositeOp
+            }
+            CompositeOperator::XorCompositeOp => {
+                magickwand_bindgen::CompositeOperator_XorCompositeOp
+            }
+            CompositeOperator::DivideDstCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DivideDstCompositeOp
+            }
+            CompositeOperator::DistortCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DistortCompositeOp
+            }
+            CompositeOperator::BlurCompositeOp => {
+                magickwand_bindgen::CompositeOperator_BlurCompositeOp
+            }
+            CompositeOperator::PegtopLightCompositeOp => {
+                magickwand_bindgen::CompositeOperator_PegtopLightCompositeOp
+            }
+            CompositeOperator::VividLightCompositeOp => {
+                magickwand_bindgen::CompositeOperator_VividLightCompositeOp
+            }
+            CompositeOperator::PinLightCompositeOp => {
+                magickwand_bindgen::CompositeOperator_PinLightCompositeOp
+            }
+            CompositeOperator::LinearDodgeCompositeOp => {
+                magickwand_bindgen::CompositeOperator_LinearDodgeCompositeOp
+            }
+            CompositeOperator::LinearBurnCompositeOp => {
+                magickwand_bindgen::CompositeOperator_LinearBurnCompositeOp
+            }
+            CompositeOperator::MathematicsCompositeOp => {
+                magickwand_bindgen::CompositeOperator_MathematicsCompositeOp
+            }
+            CompositeOperator::DivideSrcCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DivideSrcCompositeOp
+            }
+            CompositeOperator::MinusSrcCompositeOp => {
+                magickwand_bindgen::CompositeOperator_MinusSrcCompositeOp
+            }
+            CompositeOperator::DarkenIntensityCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DarkenIntensityCompositeOp
+            }
+            CompositeOperator::LightenIntensityCompositeOp => {
+                magickwand_bindgen::CompositeOperator_LightenIntensityCompositeOp
+            }
+            CompositeOperator::HardMixCompositeOp => {
+                magickwand_bindgen::CompositeOperator_HardMixCompositeOp
+            }
+        }
+    }
+}

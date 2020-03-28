@@ -5,7 +5,9 @@ use magickwand_bindgen::MagickBooleanType_MagickFalse as MagickFalse;
 use std::ffi::CString;
 use std::sync::Once;
 
+use crate::enums;
 use crate::error;
+use crate::pixel;
 
 /// File is an abstraction of FILE in C language.
 pub struct File {
@@ -60,6 +62,11 @@ impl Wand {
         Wand { ptr }
     }
 
+    pub fn clone_magick_wand(&self) -> Self {
+        let ptr = unsafe { magickwand_bindgen::CloneMagickWand(self.ptr) };
+        Wand { ptr }
+    }
+
     pub fn clear_magick_wand(&self) {
         unsafe { magickwand_bindgen::ClearMagickWand(self.ptr) };
     }
@@ -92,6 +99,60 @@ impl Wand {
 
     pub fn magick_write_images_file(&self, file: &File) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickWriteImagesFile(self.ptr, file.ptr) };
+
+        if status == MagickFalse {
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
+        }
+    }
+
+    pub fn magick_set_image_background_color(
+        &self,
+        pixel: &pixel::Pixel,
+    ) -> Result<(), error::ExceptionType> {
+        let status =
+            unsafe { magickwand_bindgen::MagickSetImageBackgroundColor(self.ptr, pixel.ptr) };
+
+        if status == MagickFalse {
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
+        }
+    }
+
+    /// Simulates an image shadow.
+    ///
+    /// - `alpha`: percentage transparency.
+    /// - `sigma`: the standard deviation of the Gaussian, in pixels.
+    /// - `x`: the shadow x-offset.
+    /// - `y`: the shadow y-offset.
+    pub fn magick_shadow_image(
+        &self,
+        alpha: f64,
+        sigma: f64,
+        x: std::os::raw::c_long,
+        y: std::os::raw::c_long,
+    ) -> Result<(), error::ExceptionType> {
+        let status = unsafe { magickwand_bindgen::MagickShadowImage(self.ptr, alpha, sigma, x, y) };
+
+        if status == MagickFalse {
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
+        }
+    }
+
+    pub fn magick_composite_image(
+        &self,
+        source: &Wand,
+        operator: enums::CompositeOperator,
+        x: std::os::raw::c_long,
+        y: std::os::raw::c_long,
+    ) -> Result<(), error::ExceptionType> {
+        let status = unsafe {
+            magickwand_bindgen::MagickCompositeImage(self.ptr, source.ptr, operator.into(), x, y)
+        };
 
         if status == MagickFalse {
             Err(self.magick_get_exception_type())
