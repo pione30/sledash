@@ -1,7 +1,10 @@
+use std::convert::TryInto;
 use std::env;
 use std::fs::DirBuilder;
 use std::io::Write;
 use std::path::Path;
+
+use indicatif::{ProgressBar, ProgressStyle};
 
 use magickwand;
 use reqwest;
@@ -49,10 +52,26 @@ async fn main() {
     // HTTP request client
     let client = reqwest::Client::new();
 
-    'emoji: for (emoji_name, emoji_url) in &response
+    let emoji = response
         .emoji
-        .expect("emoji hash should exist when response.ok is true")
-    {
+        .expect("emoji hash should exist when response.ok is true");
+
+    let progress_bar = ProgressBar::new(
+        emoji
+            .len()
+            .try_into()
+            .expect("Converting usize (emoji.len()) into u64 to be succeeded"),
+    );
+
+    progress_bar.set_style(
+        ProgressStyle::default_bar()
+            .template("{spinner:.green} [{elapsed_precise}] [{bar:40.cyan/blue}] {pos}/{len}")
+            .progress_chars("#>-"),
+    );
+
+    'emoji: for (emoji_name, emoji_url) in &emoji {
+        progress_bar.inc(1);
+
         // skip aliases
         if emoji_url.starts_with("alias") {
             continue;
@@ -223,5 +242,6 @@ async fn main() {
     }
     // magickwand::magick_wand_terminus();
 
+    progress_bar.finish();
     println!("emojis are saved under {} directory.", emoji_save_directory);
 }
