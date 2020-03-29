@@ -1,8 +1,10 @@
 ## Slack Emoji Darkmode Shader
 
-WIP: The only feature as of now is to fetch emoji lists from your Slack workspace.
+Fetch emoji lists from your Slack workspace and add white shades for better visibilities in the darkmode.
 
 Set `SLACK_APP_ACCESS_TOKEN` environment variable to your Slack OAuth Access Token with `emoji:read` scope granted.
+
+WIP: As of now, adding the shades to gif animations does not work well (some wierd animations will be generated.)
 
 ## Requirements
 
