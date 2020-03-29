@@ -9,7 +9,7 @@ Set `SLACK_APP_ACCESS_TOKEN` environment variable to your Slack OAuth Access Tok
 - Clang
   - See the [Requirements page](https://rust-lang.github.io/rust-bindgen/requirements.html) of [rust-bindgen](https://github.com/rust-lang/rust-bindgen).
 
-- ImageMagick
+- ImageMagick 7.0
 
 - MagickWand headers files
 

@@ -124,10 +124,10 @@ impl Wand {
         &mut self,
         columns: std::os::raw::c_ulong,
         rows: std::os::raw::c_ulong,
-        filter: enums::FilterTypes,
+        filter: enums::FilterType,
     ) -> Result<(), error::ExceptionType> {
         let status = unsafe {
-            magickwand_bindgen::MagickResizeImage(self.ptr, columns, rows, filter.into(), 1.0)
+            magickwand_bindgen::MagickResizeImage(self.ptr, columns, rows, filter.into())
         };
 
         if status == MagickFalse {
@@ -202,11 +202,25 @@ impl Wand {
         &mut self,
         source: &Wand,
         operator: enums::CompositeOperator,
+        clip_to_self: bool,
         x: std::os::raw::c_long,
         y: std::os::raw::c_long,
     ) -> Result<(), error::ExceptionType> {
+        let clip_to_self = if clip_to_self {
+            MagickTrue
+        } else {
+            MagickFalse
+        };
+
         let status = unsafe {
-            magickwand_bindgen::MagickCompositeImage(self.ptr, source.ptr, operator.into(), x, y)
+            magickwand_bindgen::MagickCompositeImage(
+                self.ptr,
+                source.ptr,
+                operator.into(),
+                clip_to_self,
+                x,
+                y,
+            )
         };
 
         if status == MagickFalse {

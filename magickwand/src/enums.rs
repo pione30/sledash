@@ -2,10 +2,10 @@ use magickwand_bindgen;
 
 pub enum CompositeOperator {
     UndefinedCompositeOp,
-    NoCompositeOp,
-    ModulusAddCompositeOp,
+    AlphaCompositeOp,
     AtopCompositeOp,
     BlendCompositeOp,
+    BlurCompositeOp,
     BumpmapCompositeOp,
     ChangeMaskCompositeOp,
     ClearCompositeOp,
@@ -18,31 +18,47 @@ pub enum CompositeOperator {
     CopyCyanCompositeOp,
     CopyGreenCompositeOp,
     CopyMagentaCompositeOp,
-    CopyOpacityCompositeOp,
+    CopyAlphaCompositeOp,
     CopyRedCompositeOp,
     CopyYellowCompositeOp,
     DarkenCompositeOp,
+    DarkenIntensityCompositeOp,
+    DifferenceCompositeOp,
+    DisplaceCompositeOp,
+    DissolveCompositeOp,
+    DistortCompositeOp,
+    DivideDstCompositeOp,
+    DivideSrcCompositeOp,
     DstAtopCompositeOp,
     DstCompositeOp,
     DstInCompositeOp,
     DstOutCompositeOp,
     DstOverCompositeOp,
-    DifferenceCompositeOp,
-    DisplaceCompositeOp,
-    DissolveCompositeOp,
     ExclusionCompositeOp,
     HardLightCompositeOp,
+    HardMixCompositeOp,
     HueCompositeOp,
     InCompositeOp,
+    IntensityCompositeOp,
     LightenCompositeOp,
+    LightenIntensityCompositeOp,
+    LinearBurnCompositeOp,
+    LinearDodgeCompositeOp,
     LinearLightCompositeOp,
     LuminizeCompositeOp,
+    MathematicsCompositeOp,
     MinusDstCompositeOp,
+    MinusSrcCompositeOp,
     ModulateCompositeOp,
+    ModulusAddCompositeOp,
+    ModulusSubtractCompositeOp,
     MultiplyCompositeOp,
+    NoCompositeOp,
     OutCompositeOp,
     OverCompositeOp,
     OverlayCompositeOp,
+    PegtopLightCompositeOp,
+    PinLightCompositeOp,
     PlusCompositeOp,
     ReplaceCompositeOp,
     SaturateCompositeOp,
@@ -53,23 +69,17 @@ pub enum CompositeOperator {
     SrcInCompositeOp,
     SrcOutCompositeOp,
     SrcOverCompositeOp,
-    ModulusSubtractCompositeOp,
     ThresholdCompositeOp,
-    XorCompositeOp,
-    DivideDstCompositeOp,
-    DistortCompositeOp,
-    BlurCompositeOp,
-    PegtopLightCompositeOp,
     VividLightCompositeOp,
-    PinLightCompositeOp,
-    LinearDodgeCompositeOp,
-    LinearBurnCompositeOp,
-    MathematicsCompositeOp,
-    DivideSrcCompositeOp,
-    MinusSrcCompositeOp,
-    DarkenIntensityCompositeOp,
-    LightenIntensityCompositeOp,
-    HardMixCompositeOp,
+    XorCompositeOp,
+    StereoCompositeOp,
+    FreezeCompositeOp,
+    InterpolateCompositeOp,
+    NegateCompositeOp,
+    ReflectCompositeOp,
+    SoftBurnCompositeOp,
+    SoftDodgeCompositeOp,
+    StampCompositeOp,
 }
 
 impl Into<magickwand_bindgen::CompositeOperator> for CompositeOperator {
@@ -78,15 +88,17 @@ impl Into<magickwand_bindgen::CompositeOperator> for CompositeOperator {
             CompositeOperator::UndefinedCompositeOp => {
                 magickwand_bindgen::CompositeOperator_UndefinedCompositeOp
             }
-            CompositeOperator::NoCompositeOp => magickwand_bindgen::CompositeOperator_NoCompositeOp,
-            CompositeOperator::ModulusAddCompositeOp => {
-                magickwand_bindgen::CompositeOperator_ModulusAddCompositeOp
+            CompositeOperator::AlphaCompositeOp => {
+                magickwand_bindgen::CompositeOperator_AlphaCompositeOp
             }
             CompositeOperator::AtopCompositeOp => {
                 magickwand_bindgen::CompositeOperator_AtopCompositeOp
             }
             CompositeOperator::BlendCompositeOp => {
                 magickwand_bindgen::CompositeOperator_BlendCompositeOp
+            }
+            CompositeOperator::BlurCompositeOp => {
+                magickwand_bindgen::CompositeOperator_BlurCompositeOp
             }
             CompositeOperator::BumpmapCompositeOp => {
                 magickwand_bindgen::CompositeOperator_BumpmapCompositeOp
@@ -124,8 +136,8 @@ impl Into<magickwand_bindgen::CompositeOperator> for CompositeOperator {
             CompositeOperator::CopyMagentaCompositeOp => {
                 magickwand_bindgen::CompositeOperator_CopyMagentaCompositeOp
             }
-            CompositeOperator::CopyOpacityCompositeOp => {
-                magickwand_bindgen::CompositeOperator_CopyOpacityCompositeOp
+            CompositeOperator::CopyAlphaCompositeOp => {
+                magickwand_bindgen::CompositeOperator_CopyAlphaCompositeOp
             }
             CompositeOperator::CopyRedCompositeOp => {
                 magickwand_bindgen::CompositeOperator_CopyRedCompositeOp
@@ -135,6 +147,27 @@ impl Into<magickwand_bindgen::CompositeOperator> for CompositeOperator {
             }
             CompositeOperator::DarkenCompositeOp => {
                 magickwand_bindgen::CompositeOperator_DarkenCompositeOp
+            }
+            CompositeOperator::DarkenIntensityCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DarkenIntensityCompositeOp
+            }
+            CompositeOperator::DifferenceCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DifferenceCompositeOp
+            }
+            CompositeOperator::DisplaceCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DisplaceCompositeOp
+            }
+            CompositeOperator::DissolveCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DissolveCompositeOp
+            }
+            CompositeOperator::DistortCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DistortCompositeOp
+            }
+            CompositeOperator::DivideDstCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DivideDstCompositeOp
+            }
+            CompositeOperator::DivideSrcCompositeOp => {
+                magickwand_bindgen::CompositeOperator_DivideSrcCompositeOp
             }
             CompositeOperator::DstAtopCompositeOp => {
                 magickwand_bindgen::CompositeOperator_DstAtopCompositeOp
@@ -151,27 +184,33 @@ impl Into<magickwand_bindgen::CompositeOperator> for CompositeOperator {
             CompositeOperator::DstOverCompositeOp => {
                 magickwand_bindgen::CompositeOperator_DstOverCompositeOp
             }
-            CompositeOperator::DifferenceCompositeOp => {
-                magickwand_bindgen::CompositeOperator_DifferenceCompositeOp
-            }
-            CompositeOperator::DisplaceCompositeOp => {
-                magickwand_bindgen::CompositeOperator_DisplaceCompositeOp
-            }
-            CompositeOperator::DissolveCompositeOp => {
-                magickwand_bindgen::CompositeOperator_DissolveCompositeOp
-            }
             CompositeOperator::ExclusionCompositeOp => {
                 magickwand_bindgen::CompositeOperator_ExclusionCompositeOp
             }
             CompositeOperator::HardLightCompositeOp => {
                 magickwand_bindgen::CompositeOperator_HardLightCompositeOp
             }
+            CompositeOperator::HardMixCompositeOp => {
+                magickwand_bindgen::CompositeOperator_HardMixCompositeOp
+            }
             CompositeOperator::HueCompositeOp => {
                 magickwand_bindgen::CompositeOperator_HueCompositeOp
             }
             CompositeOperator::InCompositeOp => magickwand_bindgen::CompositeOperator_InCompositeOp,
+            CompositeOperator::IntensityCompositeOp => {
+                magickwand_bindgen::CompositeOperator_IntensityCompositeOp
+            }
             CompositeOperator::LightenCompositeOp => {
                 magickwand_bindgen::CompositeOperator_LightenCompositeOp
+            }
+            CompositeOperator::LightenIntensityCompositeOp => {
+                magickwand_bindgen::CompositeOperator_LightenIntensityCompositeOp
+            }
+            CompositeOperator::LinearBurnCompositeOp => {
+                magickwand_bindgen::CompositeOperator_LinearBurnCompositeOp
+            }
+            CompositeOperator::LinearDodgeCompositeOp => {
+                magickwand_bindgen::CompositeOperator_LinearDodgeCompositeOp
             }
             CompositeOperator::LinearLightCompositeOp => {
                 magickwand_bindgen::CompositeOperator_LinearLightCompositeOp
@@ -179,15 +218,28 @@ impl Into<magickwand_bindgen::CompositeOperator> for CompositeOperator {
             CompositeOperator::LuminizeCompositeOp => {
                 magickwand_bindgen::CompositeOperator_LuminizeCompositeOp
             }
+            CompositeOperator::MathematicsCompositeOp => {
+                magickwand_bindgen::CompositeOperator_MathematicsCompositeOp
+            }
             CompositeOperator::MinusDstCompositeOp => {
                 magickwand_bindgen::CompositeOperator_MinusDstCompositeOp
+            }
+            CompositeOperator::MinusSrcCompositeOp => {
+                magickwand_bindgen::CompositeOperator_MinusSrcCompositeOp
             }
             CompositeOperator::ModulateCompositeOp => {
                 magickwand_bindgen::CompositeOperator_ModulateCompositeOp
             }
+            CompositeOperator::ModulusAddCompositeOp => {
+                magickwand_bindgen::CompositeOperator_ModulusAddCompositeOp
+            }
+            CompositeOperator::ModulusSubtractCompositeOp => {
+                magickwand_bindgen::CompositeOperator_ModulusSubtractCompositeOp
+            }
             CompositeOperator::MultiplyCompositeOp => {
                 magickwand_bindgen::CompositeOperator_MultiplyCompositeOp
             }
+            CompositeOperator::NoCompositeOp => magickwand_bindgen::CompositeOperator_NoCompositeOp,
             CompositeOperator::OutCompositeOp => {
                 magickwand_bindgen::CompositeOperator_OutCompositeOp
             }
@@ -196,6 +248,12 @@ impl Into<magickwand_bindgen::CompositeOperator> for CompositeOperator {
             }
             CompositeOperator::OverlayCompositeOp => {
                 magickwand_bindgen::CompositeOperator_OverlayCompositeOp
+            }
+            CompositeOperator::PegtopLightCompositeOp => {
+                magickwand_bindgen::CompositeOperator_PegtopLightCompositeOp
+            }
+            CompositeOperator::PinLightCompositeOp => {
+                magickwand_bindgen::CompositeOperator_PinLightCompositeOp
             }
             CompositeOperator::PlusCompositeOp => {
                 magickwand_bindgen::CompositeOperator_PlusCompositeOp
@@ -227,56 +285,38 @@ impl Into<magickwand_bindgen::CompositeOperator> for CompositeOperator {
             CompositeOperator::SrcOverCompositeOp => {
                 magickwand_bindgen::CompositeOperator_SrcOverCompositeOp
             }
-            CompositeOperator::ModulusSubtractCompositeOp => {
-                magickwand_bindgen::CompositeOperator_ModulusSubtractCompositeOp
-            }
             CompositeOperator::ThresholdCompositeOp => {
                 magickwand_bindgen::CompositeOperator_ThresholdCompositeOp
-            }
-            CompositeOperator::XorCompositeOp => {
-                magickwand_bindgen::CompositeOperator_XorCompositeOp
-            }
-            CompositeOperator::DivideDstCompositeOp => {
-                magickwand_bindgen::CompositeOperator_DivideDstCompositeOp
-            }
-            CompositeOperator::DistortCompositeOp => {
-                magickwand_bindgen::CompositeOperator_DistortCompositeOp
-            }
-            CompositeOperator::BlurCompositeOp => {
-                magickwand_bindgen::CompositeOperator_BlurCompositeOp
-            }
-            CompositeOperator::PegtopLightCompositeOp => {
-                magickwand_bindgen::CompositeOperator_PegtopLightCompositeOp
             }
             CompositeOperator::VividLightCompositeOp => {
                 magickwand_bindgen::CompositeOperator_VividLightCompositeOp
             }
-            CompositeOperator::PinLightCompositeOp => {
-                magickwand_bindgen::CompositeOperator_PinLightCompositeOp
+            CompositeOperator::XorCompositeOp => {
+                magickwand_bindgen::CompositeOperator_XorCompositeOp
             }
-            CompositeOperator::LinearDodgeCompositeOp => {
-                magickwand_bindgen::CompositeOperator_LinearDodgeCompositeOp
+            CompositeOperator::StereoCompositeOp => {
+                magickwand_bindgen::CompositeOperator_StereoCompositeOp
             }
-            CompositeOperator::LinearBurnCompositeOp => {
-                magickwand_bindgen::CompositeOperator_LinearBurnCompositeOp
+            CompositeOperator::FreezeCompositeOp => {
+                magickwand_bindgen::CompositeOperator_FreezeCompositeOp
             }
-            CompositeOperator::MathematicsCompositeOp => {
-                magickwand_bindgen::CompositeOperator_MathematicsCompositeOp
+            CompositeOperator::InterpolateCompositeOp => {
+                magickwand_bindgen::CompositeOperator_InterpolateCompositeOp
             }
-            CompositeOperator::DivideSrcCompositeOp => {
-                magickwand_bindgen::CompositeOperator_DivideSrcCompositeOp
+            CompositeOperator::NegateCompositeOp => {
+                magickwand_bindgen::CompositeOperator_NegateCompositeOp
             }
-            CompositeOperator::MinusSrcCompositeOp => {
-                magickwand_bindgen::CompositeOperator_MinusSrcCompositeOp
+            CompositeOperator::ReflectCompositeOp => {
+                magickwand_bindgen::CompositeOperator_ReflectCompositeOp
             }
-            CompositeOperator::DarkenIntensityCompositeOp => {
-                magickwand_bindgen::CompositeOperator_DarkenIntensityCompositeOp
+            CompositeOperator::SoftBurnCompositeOp => {
+                magickwand_bindgen::CompositeOperator_SoftBurnCompositeOp
             }
-            CompositeOperator::LightenIntensityCompositeOp => {
-                magickwand_bindgen::CompositeOperator_LightenIntensityCompositeOp
+            CompositeOperator::SoftDodgeCompositeOp => {
+                magickwand_bindgen::CompositeOperator_SoftDodgeCompositeOp
             }
-            CompositeOperator::HardMixCompositeOp => {
-                magickwand_bindgen::CompositeOperator_HardMixCompositeOp
+            CompositeOperator::StampCompositeOp => {
+                magickwand_bindgen::CompositeOperator_StampCompositeOp
             }
         }
     }
@@ -294,7 +334,6 @@ pub enum GravityType {
     SouthWestGravity,
     SouthGravity,
     SouthEastGravity,
-    StaticGravity,
 }
 
 impl Into<magickwand_bindgen::GravityType> for GravityType {
@@ -311,18 +350,17 @@ impl Into<magickwand_bindgen::GravityType> for GravityType {
             GravityType::SouthWestGravity => magickwand_bindgen::GravityType_SouthWestGravity,
             GravityType::SouthGravity => magickwand_bindgen::GravityType_SouthGravity,
             GravityType::SouthEastGravity => magickwand_bindgen::GravityType_SouthEastGravity,
-            GravityType::StaticGravity => magickwand_bindgen::GravityType_StaticGravity,
         }
     }
 }
 
-pub enum FilterTypes {
+pub enum FilterType {
     UndefinedFilter,
     PointFilter,
     BoxFilter,
     TriangleFilter,
     HermiteFilter,
-    HanningFilter,
+    HannFilter,
     HammingFilter,
     BlackmanFilter,
     GaussianFilter,
@@ -334,7 +372,7 @@ pub enum FilterTypes {
     SincFilter,
     SincFastFilter,
     KaiserFilter,
-    WelshFilter,
+    WelchFilter,
     ParzenFilter,
     BohmanFilter,
     BartlettFilter,
@@ -351,41 +389,41 @@ pub enum FilterTypes {
     SentinelFilter,
 }
 
-impl Into<magickwand_bindgen::FilterTypes> for FilterTypes {
-    fn into(self) -> magickwand_bindgen::FilterTypes {
+impl Into<magickwand_bindgen::FilterType> for FilterType {
+    fn into(self) -> magickwand_bindgen::FilterType {
         match self {
-            FilterTypes::UndefinedFilter => magickwand_bindgen::FilterTypes_UndefinedFilter,
-            FilterTypes::PointFilter => magickwand_bindgen::FilterTypes_PointFilter,
-            FilterTypes::BoxFilter => magickwand_bindgen::FilterTypes_BoxFilter,
-            FilterTypes::TriangleFilter => magickwand_bindgen::FilterTypes_TriangleFilter,
-            FilterTypes::HermiteFilter => magickwand_bindgen::FilterTypes_HermiteFilter,
-            FilterTypes::HanningFilter => magickwand_bindgen::FilterTypes_HanningFilter,
-            FilterTypes::HammingFilter => magickwand_bindgen::FilterTypes_HammingFilter,
-            FilterTypes::BlackmanFilter => magickwand_bindgen::FilterTypes_BlackmanFilter,
-            FilterTypes::GaussianFilter => magickwand_bindgen::FilterTypes_GaussianFilter,
-            FilterTypes::QuadraticFilter => magickwand_bindgen::FilterTypes_QuadraticFilter,
-            FilterTypes::CubicFilter => magickwand_bindgen::FilterTypes_CubicFilter,
-            FilterTypes::CatromFilter => magickwand_bindgen::FilterTypes_CatromFilter,
-            FilterTypes::MitchellFilter => magickwand_bindgen::FilterTypes_MitchellFilter,
-            FilterTypes::JincFilter => magickwand_bindgen::FilterTypes_JincFilter,
-            FilterTypes::SincFilter => magickwand_bindgen::FilterTypes_SincFilter,
-            FilterTypes::SincFastFilter => magickwand_bindgen::FilterTypes_SincFastFilter,
-            FilterTypes::KaiserFilter => magickwand_bindgen::FilterTypes_KaiserFilter,
-            FilterTypes::WelshFilter => magickwand_bindgen::FilterTypes_WelshFilter,
-            FilterTypes::ParzenFilter => magickwand_bindgen::FilterTypes_ParzenFilter,
-            FilterTypes::BohmanFilter => magickwand_bindgen::FilterTypes_BohmanFilter,
-            FilterTypes::BartlettFilter => magickwand_bindgen::FilterTypes_BartlettFilter,
-            FilterTypes::LagrangeFilter => magickwand_bindgen::FilterTypes_LagrangeFilter,
-            FilterTypes::LanczosFilter => magickwand_bindgen::FilterTypes_LanczosFilter,
-            FilterTypes::LanczosSharpFilter => magickwand_bindgen::FilterTypes_LanczosSharpFilter,
-            FilterTypes::Lanczos2Filter => magickwand_bindgen::FilterTypes_Lanczos2Filter,
-            FilterTypes::Lanczos2SharpFilter => magickwand_bindgen::FilterTypes_Lanczos2SharpFilter,
-            FilterTypes::RobidouxFilter => magickwand_bindgen::FilterTypes_RobidouxFilter,
-            FilterTypes::RobidouxSharpFilter => magickwand_bindgen::FilterTypes_RobidouxSharpFilter,
-            FilterTypes::CosineFilter => magickwand_bindgen::FilterTypes_CosineFilter,
-            FilterTypes::SplineFilter => magickwand_bindgen::FilterTypes_SplineFilter,
-            FilterTypes::LanczosRadiusFilter => magickwand_bindgen::FilterTypes_LanczosRadiusFilter,
-            FilterTypes::SentinelFilter => magickwand_bindgen::FilterTypes_SentinelFilter,
+            FilterType::UndefinedFilter => magickwand_bindgen::FilterType_UndefinedFilter,
+            FilterType::PointFilter => magickwand_bindgen::FilterType_PointFilter,
+            FilterType::BoxFilter => magickwand_bindgen::FilterType_BoxFilter,
+            FilterType::TriangleFilter => magickwand_bindgen::FilterType_TriangleFilter,
+            FilterType::HermiteFilter => magickwand_bindgen::FilterType_HermiteFilter,
+            FilterType::HannFilter => magickwand_bindgen::FilterType_HannFilter,
+            FilterType::HammingFilter => magickwand_bindgen::FilterType_HammingFilter,
+            FilterType::BlackmanFilter => magickwand_bindgen::FilterType_BlackmanFilter,
+            FilterType::GaussianFilter => magickwand_bindgen::FilterType_GaussianFilter,
+            FilterType::QuadraticFilter => magickwand_bindgen::FilterType_QuadraticFilter,
+            FilterType::CubicFilter => magickwand_bindgen::FilterType_CubicFilter,
+            FilterType::CatromFilter => magickwand_bindgen::FilterType_CatromFilter,
+            FilterType::MitchellFilter => magickwand_bindgen::FilterType_MitchellFilter,
+            FilterType::JincFilter => magickwand_bindgen::FilterType_JincFilter,
+            FilterType::SincFilter => magickwand_bindgen::FilterType_SincFilter,
+            FilterType::SincFastFilter => magickwand_bindgen::FilterType_SincFastFilter,
+            FilterType::KaiserFilter => magickwand_bindgen::FilterType_KaiserFilter,
+            FilterType::WelchFilter => magickwand_bindgen::FilterType_WelchFilter,
+            FilterType::ParzenFilter => magickwand_bindgen::FilterType_ParzenFilter,
+            FilterType::BohmanFilter => magickwand_bindgen::FilterType_BohmanFilter,
+            FilterType::BartlettFilter => magickwand_bindgen::FilterType_BartlettFilter,
+            FilterType::LagrangeFilter => magickwand_bindgen::FilterType_LagrangeFilter,
+            FilterType::LanczosFilter => magickwand_bindgen::FilterType_LanczosFilter,
+            FilterType::LanczosSharpFilter => magickwand_bindgen::FilterType_LanczosSharpFilter,
+            FilterType::Lanczos2Filter => magickwand_bindgen::FilterType_Lanczos2Filter,
+            FilterType::Lanczos2SharpFilter => magickwand_bindgen::FilterType_Lanczos2SharpFilter,
+            FilterType::RobidouxFilter => magickwand_bindgen::FilterType_RobidouxFilter,
+            FilterType::RobidouxSharpFilter => magickwand_bindgen::FilterType_RobidouxSharpFilter,
+            FilterType::CosineFilter => magickwand_bindgen::FilterType_CosineFilter,
+            FilterType::SplineFilter => magickwand_bindgen::FilterType_SplineFilter,
+            FilterType::LanczosRadiusFilter => magickwand_bindgen::FilterType_LanczosRadiusFilter,
+            FilterType::SentinelFilter => magickwand_bindgen::FilterType_SentinelFilter,
         }
     }
 }

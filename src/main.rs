@@ -160,7 +160,7 @@ async fn main() {
 
             // resizing is mandatory, because adding shadow probably expand the size of the image.
             if let Err(exception_type) =
-                shadow_clone.magick_resize_image(128, 128, magickwand::FilterTypes::GaussianFilter)
+                shadow_clone.magick_resize_image(128, 128, magickwand::FilterType::GaussianFilter)
             {
                 eprintln!(
                     "magick_resize_image {} failed: {}",
@@ -171,7 +171,7 @@ async fn main() {
             }
 
             if let Err(exception_type) =
-                wand.magick_resize_image(128, 128, magickwand::FilterTypes::GaussianFilter)
+                wand.magick_resize_image(128, 128, magickwand::FilterType::GaussianFilter)
             {
                 eprintln!(
                     "magick_resize_image {} failed: {}",
@@ -195,6 +195,7 @@ async fn main() {
             if let Err(exception_type) = wand.magick_composite_image(
                 &shadow_clone,
                 magickwand::CompositeOperator::DstOverCompositeOp,
+                true,
                 0,
                 0,
             ) {
