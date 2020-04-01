@@ -5,6 +5,7 @@ use std::io::Write;
 use std::path::Path;
 
 use indicatif::{ProgressBar, ProgressStyle};
+use regex::Regex;
 
 use magickwand;
 use reqwest;
@@ -56,6 +57,8 @@ async fn main() {
         .emoji
         .expect("emoji hash should exist when response.ok is true");
 
+    let re_jpeg = Regex::new(r"jpe?g").unwrap();
+
     let progress_bar = ProgressBar::new(
         emoji
             .len()
@@ -83,6 +86,11 @@ async fn main() {
             eprintln!("{} is not a valid emoji url", emoji_url);
             continue;
         };
+
+        // skip jpeg
+        if re_jpeg.is_match(extension) {
+            continue;
+        }
 
         let response = client.get(emoji_url).send().await;
         if let Err(error) = response {
