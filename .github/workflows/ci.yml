@@ -11,18 +11,21 @@ jobs:
       IMAGEMAGICK_VERSION: 7.0.10-2
     steps:
       - name: Cache ImageMagick 7 headers
+        id: cache-imagemagick-7-headers
         uses: actions/cache@v1
         with:
           path: /usr/local/include
           key: ${{ runner.os }}-cargo-registry-${{ env.IMAGEMAGICK_VERSION }}
 
       - name: Cache ImageMagick 7 libs
+        id: cache-imagemagick-7-libs
         uses: actions/cache@v1
         with:
           path: /usr/local/lib
           key: ${{ runner.os }}-cargo-registry-${{ env.IMAGEMAGICK_VERSION }}
 
       - name: Install ImageMagick 7
+        if: steps.cache-imagemagick-7-headers.outputs.cache-hit != 'true' || steps.cache-imagemagick-7-libs.outputs.cache-hit != 'true'
         run: |
           cd /tmp
           wget https://imagemagick.org/download/releases/ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz
