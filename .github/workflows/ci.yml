@@ -10,6 +10,18 @@ jobs:
       LLVM_CONFIG_PATH: /usr/lib/llvm-9/bin/llvm-config
       IMAGEMAGICK_VERSION: 7.0.10-2
     steps:
+      - name: Cache ImageMagick 7 headers
+        uses: actions/cache@v1
+        with:
+          path: /usr/local/include
+          key: ${{ runner.os }}-cargo-registry-${{ env.IMAGEMAGICK_VERSION }}
+
+      - name: Cache ImageMagick 7 libs
+        uses: actions/cache@v1
+        with:
+          path: /usr/local/lib
+          key: ${{ runner.os }}-cargo-registry-${{ env.IMAGEMAGICK_VERSION }}
+
       - name: Install ImageMagick 7
         run: |
           cd /tmp
