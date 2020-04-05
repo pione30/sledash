@@ -90,21 +90,13 @@ impl Wand {
     pub fn magick_read_image_file(&mut self, file: &mut File) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickReadImageFile(self.ptr, file.ptr) };
 
-        if status == MagickFalse {
-            Err(self.magick_get_exception_type())
-        } else {
-            Ok(())
-        }
+        self.magick_result(status)
     }
 
     pub fn magick_write_image_file(&mut self, file: &mut File) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickWriteImageFile(self.ptr, file.ptr) };
 
-        if status == MagickFalse {
-            Err(self.magick_get_exception_type())
-        } else {
-            Ok(())
-        }
+        self.magick_result(status)
     }
 
     pub fn magick_write_images_file(
@@ -113,11 +105,7 @@ impl Wand {
     ) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickWriteImagesFile(self.ptr, file.ptr) };
 
-        if status == MagickFalse {
-            Err(self.magick_get_exception_type())
-        } else {
-            Ok(())
-        }
+        self.magick_result(status)
     }
 
     pub fn magick_resize_image(
@@ -130,11 +118,7 @@ impl Wand {
             magickwand_bindgen::MagickResizeImage(self.ptr, columns, rows, filter.into())
         };
 
-        if status == MagickFalse {
-            Err(self.magick_get_exception_type())
-        } else {
-            Ok(())
-        }
+        self.magick_result(status)
     }
 
     pub fn magick_set_image_gravity(
@@ -144,11 +128,7 @@ impl Wand {
         let status =
             unsafe { magickwand_bindgen::MagickSetImageGravity(self.ptr, gravity_type.into()) };
 
-        if status == MagickFalse {
-            Err(self.magick_get_exception_type())
-        } else {
-            Ok(())
-        }
+        self.magick_result(status)
     }
 
     pub fn magick_set_image_background_color(
@@ -158,22 +138,14 @@ impl Wand {
         let status =
             unsafe { magickwand_bindgen::MagickSetImageBackgroundColor(self.ptr, pixel.ptr) };
 
-        if status == MagickFalse {
-            Err(self.magick_get_exception_type())
-        } else {
-            Ok(())
-        }
+        self.magick_result(status)
     }
 
     pub fn magick_reset_image_page(&mut self, page: &str) -> Result<(), error::ExceptionType> {
         let c_page = CString::new(page).expect("CString::new(page) should be created");
         let status = unsafe { magickwand_bindgen::MagickResetImagePage(self.ptr, c_page.as_ptr()) };
 
-        if status == MagickFalse {
-            Err(self.magick_get_exception_type())
-        } else {
-            Ok(())
-        }
+        self.magick_result(status)
     }
 
     /// Simulates an image shadow.
@@ -191,11 +163,7 @@ impl Wand {
     ) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickShadowImage(self.ptr, alpha, sigma, x, y) };
 
-        if status == MagickFalse {
-            Err(self.magick_get_exception_type())
-        } else {
-            Ok(())
-        }
+        self.magick_result(status)
     }
 
     pub fn magick_composite_image(
@@ -223,11 +191,7 @@ impl Wand {
             )
         };
 
-        if status == MagickFalse {
-            Err(self.magick_get_exception_type())
-        } else {
-            Ok(())
-        }
+        self.magick_result(status)
     }
 
     pub fn magick_composite_image_gravity(
@@ -245,6 +209,13 @@ impl Wand {
             )
         };
 
+        self.magick_result(status)
+    }
+
+    fn magick_result(
+        &self,
+        status: magickwand_bindgen::MagickBooleanType,
+    ) -> Result<(), error::ExceptionType> {
         if status == MagickFalse {
             Err(self.magick_get_exception_type())
         } else {
