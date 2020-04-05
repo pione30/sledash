@@ -230,6 +230,28 @@ impl Wand {
         }
     }
 
+    pub fn magick_composite_image_gravity(
+        &mut self,
+        source: &Wand,
+        operator: enums::CompositeOperator,
+        gravity_type: enums::GravityType,
+    ) -> Result<(), error::ExceptionType> {
+        let status = unsafe {
+            magickwand_bindgen::MagickCompositeImageGravity(
+                self.ptr,
+                source.ptr,
+                operator.into(),
+                gravity_type.into(),
+            )
+        };
+
+        if status == MagickFalse {
+            Err(self.magick_get_exception_type())
+        } else {
+            Ok(())
+        }
+    }
+
     fn magick_get_exception_type(&self) -> error::ExceptionType {
         let exception_type = unsafe { magickwand_bindgen::MagickGetExceptionType(self.ptr) };
         error::get_exception_type(exception_type)
