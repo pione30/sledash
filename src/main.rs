@@ -185,49 +185,13 @@ async fn main() {
                 continue 'emoji;
             }
 
-            // resizing is mandatory, because adding shadow probably expand the size of the image.
-            if let Err(exception_type) =
-                shadow_clone.magick_resize_image(128, 128, magickwand::FilterType::GaussianFilter)
-            {
-                eprintln!(
-                    "magick_resize_image {} failed: {}",
-                    &emoji_save_path.display(),
-                    exception_type
-                );
-                continue 'emoji;
-            }
-
-            if let Err(exception_type) =
-                wand.magick_resize_image(128, 128, magickwand::FilterType::GaussianFilter)
-            {
-                eprintln!(
-                    "magick_resize_image {} failed: {}",
-                    &emoji_save_path.display(),
-                    exception_type
-                );
-                continue 'emoji;
-            }
-
-            if let Err(exception_type) =
-                wand.magick_set_image_gravity(magickwand::GravityType::CenterGravity)
-            {
-                eprintln!(
-                    "magick_set_image_gravity {} failed: {}",
-                    &emoji_save_path.display(),
-                    exception_type
-                );
-                continue 'emoji;
-            }
-
-            if let Err(exception_type) = wand.magick_composite_image(
+            if let Err(exception_type) = wand.magick_composite_image_gravity(
                 &shadow_clone,
                 magickwand::CompositeOperator::DstOverCompositeOp,
-                true,
-                0,
-                0,
+                magickwand::GravityType::CenterGravity,
             ) {
                 eprintln!(
-                    "magick_composite_image {} failed: {}",
+                    "magick_composite_image_gravity {} failed: {}",
                     &emoji_save_path.display(),
                     exception_type
                 );
