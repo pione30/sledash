@@ -386,6 +386,7 @@ pub enum FilterType {
     CosineFilter,
     SplineFilter,
     LanczosRadiusFilter,
+    CubicSplineFilter,
     SentinelFilter,
 }
 
@@ -423,6 +424,7 @@ impl Into<magickwand_bindgen::FilterType> for FilterType {
             FilterType::CosineFilter => magickwand_bindgen::FilterType_CosineFilter,
             FilterType::SplineFilter => magickwand_bindgen::FilterType_SplineFilter,
             FilterType::LanczosRadiusFilter => magickwand_bindgen::FilterType_LanczosRadiusFilter,
+            FilterType::CubicSplineFilter => magickwand_bindgen::FilterType_CubicSplineFilter,
             FilterType::SentinelFilter => magickwand_bindgen::FilterType_SentinelFilter,
         }
     }
