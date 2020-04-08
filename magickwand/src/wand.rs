@@ -110,8 +110,8 @@ impl Wand {
 
     pub fn magick_resize_image(
         &mut self,
-        columns: std::os::raw::c_ulong,
-        rows: std::os::raw::c_ulong,
+        columns: magickwand_bindgen::size_t,
+        rows: magickwand_bindgen::size_t,
         filter: enums::FilterType,
     ) -> Result<(), error::ExceptionType> {
         let status = unsafe {
@@ -158,8 +158,8 @@ impl Wand {
         &mut self,
         alpha: f64,
         sigma: f64,
-        x: std::os::raw::c_long,
-        y: std::os::raw::c_long,
+        x: magickwand_bindgen::ssize_t,
+        y: magickwand_bindgen::ssize_t,
     ) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickShadowImage(self.ptr, alpha, sigma, x, y) };
 
@@ -171,8 +171,8 @@ impl Wand {
         source: &Wand,
         operator: enums::CompositeOperator,
         clip_to_self: bool,
-        x: std::os::raw::c_long,
-        y: std::os::raw::c_long,
+        x: magickwand_bindgen::ssize_t,
+        y: magickwand_bindgen::ssize_t,
     ) -> Result<(), error::ExceptionType> {
         let clip_to_self = if clip_to_self {
             MagickTrue
