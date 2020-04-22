@@ -87,6 +87,10 @@ impl Wand {
         }
     }
 
+    pub fn magick_get_number_images(&mut self) -> magickwand_bindgen::size_t {
+        unsafe { magickwand_bindgen::MagickGetNumberImages(self.ptr) }
+    }
+
     pub fn magick_read_image_file(&mut self, file: &mut File) -> Result<(), error::ExceptionType> {
         let status = unsafe { magickwand_bindgen::MagickReadImageFile(self.ptr, file.ptr) };
 
