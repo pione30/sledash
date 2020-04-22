@@ -67,7 +67,7 @@ async fn main() {
 
     emoji_progress_bar.set_style(progress_style.clone());
 
-    'emoji: for (emoji_name, emoji_url) in &emoji {
+    for (emoji_name, emoji_url) in &emoji {
         emoji_progress_bar.inc(1);
 
         // skip aliases
