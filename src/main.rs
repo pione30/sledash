@@ -55,7 +55,7 @@ async fn main() {
 
     let multi_progress = MultiProgress::new();
     let progress_style = ProgressStyle::default_bar()
-        .template("{spinner:.green} (images: [{elapsed_precise}] [{bar:40.cyan/blue}] {pos}/{len})")
+        .template("{spinner:.green} ([{elapsed_precise}] [{bar:40.cyan/blue}] {pos}/{len} {msg})")
         .progress_chars("#>-");
 
     let emoji_progress_bar = multi_progress.add(ProgressBar::new(
@@ -66,6 +66,7 @@ async fn main() {
     ));
 
     emoji_progress_bar.set_style(progress_style.clone());
+    emoji_progress_bar.set_message("emoji");
 
     for (emoji_name, emoji_url) in &emoji {
         emoji_progress_bar.inc(1);
@@ -133,6 +134,7 @@ async fn main() {
         // image_progress_bar to show processing of gif images
         let image_progress_bar = multi_progress.add(ProgressBar::new(1));
         image_progress_bar.set_style(progress_style.clone());
+        image_progress_bar.set_message("image");
 
         let wand_task = task::spawn(async move {
             task::spawn_blocking(move || {
