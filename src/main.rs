@@ -6,7 +6,7 @@ use std::path::Path;
 use tokio::task;
 
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
-use regex::Regex;
+use regex::RegexSet;
 
 mod emoji_list;
 
@@ -48,7 +48,9 @@ async fn main() {
         .emoji
         .expect("emoji hash should exist when response.ok is true");
 
-    let re_jpeg = Regex::new(r"jpe?g").unwrap();
+    // # TODO: dealing with gif animations
+    // ignore jpeg and gif
+    let ignored_extensions = RegexSet::new(&[r"jpe?g", r"gif"]).unwrap();
 
     let multi_progress = MultiProgress::new();
     let progress_style = ProgressStyle::default_bar()
@@ -80,8 +82,7 @@ async fn main() {
             continue;
         };
 
-        // skip jpeg
-        if re_jpeg.is_match(extension) {
+        if ignored_extensions.is_match(extension) {
             continue;
         }
 
