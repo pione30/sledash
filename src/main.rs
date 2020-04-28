@@ -8,9 +8,6 @@ use tokio::task;
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 use regex::Regex;
 
-use magickwand;
-use reqwest;
-
 mod emoji_list;
 
 #[tokio::main]

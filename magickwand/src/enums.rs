@@ -1,5 +1,3 @@
-use magickwand_bindgen;
-
 pub enum CompositeOperator {
     UndefinedCompositeOp,
     AlphaCompositeOp,
