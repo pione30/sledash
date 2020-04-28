@@ -1,4 +1,3 @@
-use magickwand_bindgen;
 use std::fmt;
 
 #[derive(Debug)]

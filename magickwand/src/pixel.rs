@@ -1,4 +1,3 @@
-use magickwand_bindgen;
 use magickwand_bindgen::MagickBooleanType_MagickFalse as MagickFalse;
 // use magickwand_bindgen::MagickBooleanType_MagickTrue as MagickTrue;
 
