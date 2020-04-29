@@ -1,3 +1,5 @@
+![](https://github.com/pione30/slack-emoji-darkmode-shader/workflows/Continuous%20integration/badge.svg)
+
 ## Slack Emoji Darkmode Shader
 
 Fetch emoji lists from your Slack workspace and add white shades for better visibilities in the darkmode.
@@ -26,3 +28,7 @@ $ pkg-config --exists MagickWand; echo $?
 ```
 
 does not show `0`, something are missing. Check your environment again and install the missing packages.
+
+## License
+
+MIT OR Apache-2.0
