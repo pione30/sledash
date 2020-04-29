@@ -48,9 +48,8 @@ async fn main() {
         .emoji
         .expect("emoji hash should exist when response.ok is true");
 
-    // # TODO: dealing with gif animations
-    // ignore jpeg and gif
-    let ignored_extensions = RegexSet::new(&[r"jpe?g", r"gif"]).unwrap();
+    // ignore jpeg
+    let ignored_extensions = RegexSet::new(&[r"jpe?g"]).unwrap();
 
     let multi_progress = MultiProgress::new();
     let progress_style = ProgressStyle::default_bar()
@@ -82,7 +81,8 @@ async fn main() {
             continue;
         };
 
-        if ignored_extensions.is_match(extension) {
+        // # TODO: dealing with gif animations
+        if ignored_extensions.is_match(extension) || extension.contains("gif") {
             continue;
         }
 
