@@ -13,7 +13,7 @@ WIP: As of now, adding the shades to gif animations does not work well (some wie
 - Clang
   - See the [Requirements page](https://rust-lang.github.io/rust-bindgen/requirements.html) of [rust-bindgen](https://github.com/rust-lang/rust-bindgen).
 
-- ImageMagick 7.0
+- ImageMagick >= 7.0.10
 
 - MagickWand headers files
 
