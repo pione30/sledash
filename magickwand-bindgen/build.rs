@@ -21,7 +21,7 @@ fn main() {
     println!("cargo:rerun-if-changed=build.rs");
 
     let wand_config = pkg_config::Config::new()
-        .atleast_version("7.0")
+        .atleast_version("7.0.10")
         .probe("MagickWand")
         .expect("pkg-config MagickWand should be probed");
 
