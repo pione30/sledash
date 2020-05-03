@@ -245,14 +245,15 @@ async fn main() {
             });
         }
 
-        task::spawn_blocking(move || {
+        task::block_in_place(|| {
             emoji_progress_bar.finish();
+        });
+
+        task::block_in_place(|| {
             multi_progress
                 .join_and_clear()
                 .expect("multi_progress to be join and clear");
-        })
-        .await
-        .expect("progress_bars to finish");
+        });
     })
     .await
     .expect("wand_task to complete");
