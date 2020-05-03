@@ -68,7 +68,10 @@ async fn main() {
 
     let wand_task = task::spawn(async move {
         for (emoji_name, emoji_url) in &emoji {
-            emoji_progress_bar.inc(1);
+            // flushing to the terminal is a heavy task
+            task::block_in_place(|| {
+                emoji_progress_bar.inc(1);
+            });
 
             // skip aliases
             if emoji_url.starts_with("alias") {
@@ -107,127 +110,137 @@ async fn main() {
             let emoji_filename = format!("{}{}", emoji_name, extension);
             let emoji_save_path = Path::new(emoji_save_directory).join(emoji_filename);
 
-            {
+            // saving emoji to the file is a heavy task
+            if let Err(message) = task::block_in_place(|| {
                 let file = std::fs::File::create(&emoji_save_path);
                 if let Err(error) = file {
-                    eprintln!(
+                    return Err(format!(
                         "Failed to create emoji file {}: {}",
                         &emoji_save_path.display(),
                         error
-                    );
-                    continue;
+                    ));
                 }
                 let mut file = file.unwrap();
 
                 // save emoji bytes
                 if let Err(error) = file.write_all(bytes.as_ref()) {
-                    eprintln!(
+                    return Err(format!(
                         "Failed to write bytes to file {}: {}",
                         &emoji_save_path.display(),
                         error
-                    );
-                    continue;
+                    ));
                 }
+
+                Ok(())
+            }) {
+                eprintln!("{}", message);
+                continue;
+            }
+
+            // wand to be taken by all the MagickWandy APIs
+            let mut wand = magickwand::Wand::new();
+
+            if let Err(exception_type) = task::block_in_place(|| {
+                let mut input_emoji =
+                    magickwand::File::new(&emoji_save_path.to_string_lossy(), "rb");
+
+                wand.magick_read_image_file(&mut input_emoji)
+            }) {
+                eprintln!(
+                    "magick_read_image_file {} failed: {}",
+                    &emoji_save_path.display(),
+                    exception_type
+                );
+                continue;
+            }
+
+            wand.magick_reset_iterator();
+
+            // Pixel set its color to white
+            let mut pixel_white = magickwand::Pixel::new();
+            if let Err(exception_type) = pixel_white.pixel_set_color("white") {
+                eprintln!("Failed to set Pixel to white: {}", exception_type);
+                continue;
             }
 
             // image_progress_bar to show processing of gif images
-            let image_progress_bar = multi_progress.add(ProgressBar::new(1));
+            let image_progress_bar =
+                multi_progress.add(ProgressBar::new(wand.magick_get_number_images()));
             image_progress_bar.set_style(progress_style.clone());
             image_progress_bar.set_message("image");
 
-            task::spawn_blocking(move || {
-                // wand to be taken by all the MagickWandy APIs
-                let mut wand = magickwand::Wand::new();
-
-                {
-                    let mut input_emoji =
-                        magickwand::File::new(&emoji_save_path.to_string_lossy(), "rb");
-
-                    if let Err(exception_type) = wand.magick_read_image_file(&mut input_emoji) {
-                        eprintln!(
-                            "magick_read_image_file {} failed: {}",
-                            &emoji_save_path.display(),
-                            exception_type
-                        );
-                        return;
-                    }
-                }
-
-                wand.magick_reset_iterator();
-
-                // initialize image_progress_bar
-                image_progress_bar.set_length(wand.magick_get_number_images());
-
-                // Pixel set its color to white
-                let mut pixel_white = magickwand::Pixel::new();
-                if let Err(exception_type) = pixel_white.pixel_set_color("white") {
-                    eprintln!("Failed to set Pixel to white: {}", exception_type);
-                    return;
-                }
-
-                while wand.magick_next_image().is_some() {
+            while wand.magick_next_image().is_some() {
+                // flushing to the terminal is a heavy task
+                task::block_in_place(|| {
                     image_progress_bar.inc(1);
+                });
 
-                    // use for shadowing the clone of the original emoji
-                    let mut shadow_clone = wand.clone_magick_wand();
+                // use for shadowing the clone of the original emoji
+                let mut shadow_clone = wand.clone_magick_wand();
 
-                    if let Err(exception_type) =
-                        shadow_clone.magick_set_image_background_color(&pixel_white)
-                    {
-                        eprintln!(
-                            "magick_set_image_background_color to white {} failed: {}",
-                            &emoji_save_path.display(),
-                            exception_type
-                        );
-                        break;
-                    }
+                if let Err(exception_type) = task::block_in_place(|| {
+                    shadow_clone.magick_set_image_background_color(&pixel_white)
+                }) {
+                    eprintln!(
+                        "magick_set_image_background_color to white {} failed: {}",
+                        &emoji_save_path.display(),
+                        exception_type
+                    );
+                    break;
+                }
 
-                    if let Err(exception_type) = shadow_clone.magick_shadow_image(100.0, 8.0, 0, 0)
-                    {
-                        eprintln!(
-                            "magick_shadow_image {} failed: {}",
-                            &emoji_save_path.display(),
-                            exception_type
-                        );
-                        break;
-                    }
+                if let Err(exception_type) =
+                    task::block_in_place(|| shadow_clone.magick_shadow_image(100.0, 8.0, 0, 0))
+                {
+                    eprintln!(
+                        "magick_shadow_image {} failed: {}",
+                        &emoji_save_path.display(),
+                        exception_type
+                    );
+                    break;
+                }
 
-                    if let Err(exception_type) = shadow_clone.magick_reset_image_page("") {
-                        eprintln!(
-                            "magick_reset_image_page {} failed: {}",
-                            &emoji_save_path.display(),
-                            exception_type
-                        );
-                        break;
-                    }
+                if let Err(exception_type) =
+                    task::block_in_place(|| shadow_clone.magick_reset_image_page(""))
+                {
+                    eprintln!(
+                        "magick_reset_image_page {} failed: {}",
+                        &emoji_save_path.display(),
+                        exception_type
+                    );
+                    break;
+                }
 
-                    if let Err(exception_type) = wand.magick_composite_image_gravity(
+                if let Err(exception_type) = task::block_in_place(|| {
+                    wand.magick_composite_image_gravity(
                         &shadow_clone,
                         magickwand::CompositeOperator::DstOverCompositeOp,
                         magickwand::GravityType::CenterGravity,
-                    ) {
-                        eprintln!(
-                            "magick_composite_image_gravity {} failed: {}",
-                            &emoji_save_path.display(),
-                            exception_type
-                        );
-                        break;
-                    }
+                    )
+                }) {
+                    eprintln!(
+                        "magick_composite_image_gravity {} failed: {}",
+                        &emoji_save_path.display(),
+                        exception_type
+                    );
+                    break;
                 }
+            }
 
-                {
-                    let mut output_emoji =
-                        magickwand::File::new(&emoji_save_path.to_string_lossy(), "wb");
-                    // *images* to deal with gif animations
-                    if let Err(exception_type) = wand.magick_write_images_file(&mut output_emoji) {
-                        eprintln!(
-                            "magick_write_images_file {} failed: {}",
-                            &emoji_save_path.display(),
-                            exception_type
-                        );
-                    }
-                }
+            if let Err(exception_type) = task::block_in_place(|| {
+                let mut output_emoji =
+                    magickwand::File::new(&emoji_save_path.to_string_lossy(), "wb");
+                // *images* to deal with gif animations
+                wand.magick_write_images_file(&mut output_emoji)
+            }) {
+                eprintln!(
+                    "magick_write_images_file {} failed: {}",
+                    &emoji_save_path.display(),
+                    exception_type
+                );
+            }
 
+            task::block_in_place(|| {
                 image_progress_bar.finish_and_clear();
             });
         }
