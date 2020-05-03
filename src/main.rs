@@ -66,75 +66,75 @@ async fn main() {
     emoji_progress_bar.set_style(progress_style.clone());
     emoji_progress_bar.set_message("emoji");
 
-    for (emoji_name, emoji_url) in &emoji {
-        emoji_progress_bar.inc(1);
+    let wand_task = task::spawn(async move {
+        for (emoji_name, emoji_url) in &emoji {
+            emoji_progress_bar.inc(1);
 
-        // skip aliases
-        if emoji_url.starts_with("alias") {
-            continue;
-        }
+            // skip aliases
+            if emoji_url.starts_with("alias") {
+                continue;
+            }
 
-        let extension = if let Some(index) = emoji_url.rfind('.') {
-            &emoji_url[index..emoji_url.len()]
-        } else {
-            eprintln!("{} is not a valid emoji url", emoji_url);
-            continue;
-        };
+            let extension = if let Some(index) = emoji_url.rfind('.') {
+                &emoji_url[index..emoji_url.len()]
+            } else {
+                eprintln!("{} is not a valid emoji url", emoji_url);
+                continue;
+            };
 
-        // # TODO: dealing with gif animations
-        if ignored_extensions.is_match(extension) || extension.contains("gif") {
-            continue;
-        }
+            // # TODO: dealing with gif animations
+            if ignored_extensions.is_match(extension) || extension.contains("gif") {
+                continue;
+            }
 
-        let response = client.get(emoji_url).send().await;
-        if let Err(error) = response {
-            eprintln!("HTTP GET {} failed: {}", emoji_url, error);
-            continue;
-        }
-        let response = response.unwrap();
+            let response = client.get(emoji_url).send().await;
+            if let Err(error) = response {
+                eprintln!("HTTP GET {} failed: {}", emoji_url, error);
+                continue;
+            }
+            let response = response.unwrap();
 
-        let bytes = response.bytes().await;
-        if let Err(error) = bytes {
-            eprintln!(
-                "Failed to get the full emoji {} response body as bytes: {}",
-                emoji_name, error
-            );
-            continue;
-        }
-        let bytes = bytes.unwrap();
-
-        let emoji_filename = format!("{}{}", emoji_name, extension);
-        let emoji_save_path = Path::new(emoji_save_directory).join(emoji_filename);
-
-        {
-            let file = std::fs::File::create(&emoji_save_path);
-            if let Err(error) = file {
+            let bytes = response.bytes().await;
+            if let Err(error) = bytes {
                 eprintln!(
-                    "Failed to create emoji file {}: {}",
-                    &emoji_save_path.display(),
-                    error
+                    "Failed to get the full emoji {} response body as bytes: {}",
+                    emoji_name, error
                 );
                 continue;
             }
-            let mut file = file.unwrap();
+            let bytes = bytes.unwrap();
 
-            // save emoji bytes
-            if let Err(error) = file.write_all(bytes.as_ref()) {
-                eprintln!(
-                    "Failed to write bytes to file {}: {}",
-                    &emoji_save_path.display(),
-                    error
-                );
-                continue;
+            let emoji_filename = format!("{}{}", emoji_name, extension);
+            let emoji_save_path = Path::new(emoji_save_directory).join(emoji_filename);
+
+            {
+                let file = std::fs::File::create(&emoji_save_path);
+                if let Err(error) = file {
+                    eprintln!(
+                        "Failed to create emoji file {}: {}",
+                        &emoji_save_path.display(),
+                        error
+                    );
+                    continue;
+                }
+                let mut file = file.unwrap();
+
+                // save emoji bytes
+                if let Err(error) = file.write_all(bytes.as_ref()) {
+                    eprintln!(
+                        "Failed to write bytes to file {}: {}",
+                        &emoji_save_path.display(),
+                        error
+                    );
+                    continue;
+                }
             }
-        }
 
-        // image_progress_bar to show processing of gif images
-        let image_progress_bar = multi_progress.add(ProgressBar::new(1));
-        image_progress_bar.set_style(progress_style.clone());
-        image_progress_bar.set_message("image");
+            // image_progress_bar to show processing of gif images
+            let image_progress_bar = multi_progress.add(ProgressBar::new(1));
+            image_progress_bar.set_style(progress_style.clone());
+            image_progress_bar.set_message("image");
 
-        let wand_task = task::spawn(async move {
             task::spawn_blocking(move || {
                 // wand to be taken by all the MagickWandy APIs
                 let mut wand = magickwand::Wand::new();
@@ -230,14 +230,21 @@ async fn main() {
 
                 image_progress_bar.finish_and_clear();
             });
+        }
+
+        let progress_finish_handle = task::spawn_blocking(move || {
+            emoji_progress_bar.finish();
+            multi_progress
+                .join_and_clear()
+                .expect("multi_progress to be join and clear");
         });
-        wand_task.await.expect("wand_task to complete");
-    }
+        progress_finish_handle
+            .await
+            .expect("progress_bars to finish");
+    });
+    wand_task.await.expect("wand_task to complete");
+
     // magickwand::magick_wand_terminus();
 
-    emoji_progress_bar.finish();
-    multi_progress
-        .join_and_clear()
-        .expect("multi_progress to be join and clear");
     println!("emojis are saved under {} directory.", emoji_save_directory);
 }
