@@ -66,7 +66,7 @@ async fn main() {
     emoji_progress_bar.set_style(progress_style.clone());
     emoji_progress_bar.set_message("emoji");
 
-    let wand_task = task::spawn(async move {
+    task::spawn(async move {
         for (emoji_name, emoji_url) in &emoji {
             // flushing to the terminal is a heavy task
             task::block_in_place(|| {
@@ -245,17 +245,17 @@ async fn main() {
             });
         }
 
-        let progress_finish_handle = task::spawn_blocking(move || {
+        task::spawn_blocking(move || {
             emoji_progress_bar.finish();
             multi_progress
                 .join_and_clear()
                 .expect("multi_progress to be join and clear");
-        });
-        progress_finish_handle
-            .await
-            .expect("progress_bars to finish");
-    });
-    wand_task.await.expect("wand_task to complete");
+        })
+        .await
+        .expect("progress_bars to finish");
+    })
+    .await
+    .expect("wand_task to complete");
 
     // magickwand::magick_wand_terminus();
 
