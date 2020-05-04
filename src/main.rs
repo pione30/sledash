@@ -5,7 +5,7 @@ use std::io::Write;
 use std::path::Path;
 use tokio::task;
 
-use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
+use indicatif::{ProgressBar, ProgressStyle};
 use regex::RegexSet;
 
 mod emoji_list;
@@ -51,17 +51,16 @@ async fn main() {
     // ignore jpeg
     let ignored_extensions = RegexSet::new(&[r"jpe?g"]).unwrap();
 
-    let multi_progress = MultiProgress::new();
     let progress_style = ProgressStyle::default_bar()
         .template("{spinner:.green} ([{elapsed_precise}] [{bar:40.cyan/blue}] {pos}/{len} {msg})")
         .progress_chars("#>-");
 
-    let emoji_progress_bar = multi_progress.add(ProgressBar::new(
+    let emoji_progress_bar = ProgressBar::new(
         emoji
             .len()
             .try_into()
             .expect("Converting usize (emoji.len()) into u64 to be succeeded"),
-    ));
+    );
 
     emoji_progress_bar.set_style(progress_style.clone());
     emoji_progress_bar.set_message("emoji");
@@ -163,18 +162,7 @@ async fn main() {
                 continue;
             }
 
-            // image_progress_bar to show processing of gif images
-            let image_progress_bar =
-                multi_progress.add(ProgressBar::new(wand.magick_get_number_images()));
-            image_progress_bar.set_style(progress_style.clone());
-            image_progress_bar.set_message("image");
-
             while wand.magick_next_image().is_some() {
-                // flushing to the terminal is a heavy task
-                task::block_in_place(|| {
-                    image_progress_bar.inc(1);
-                });
-
                 // use for shadowing the clone of the original emoji
                 let mut shadow_clone = wand.clone_magick_wand();
 
@@ -239,20 +227,10 @@ async fn main() {
                     exception_type
                 );
             }
-
-            task::block_in_place(|| {
-                image_progress_bar.finish_and_clear();
-            });
         }
 
         task::block_in_place(|| {
-            emoji_progress_bar.finish();
-        });
-
-        task::block_in_place(|| {
-            multi_progress
-                .join_and_clear()
-                .expect("multi_progress to be join and clear");
+            emoji_progress_bar.finish_with_message("done");
         });
     })
     .await
