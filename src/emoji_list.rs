@@ -58,3 +58,15 @@ pub async fn fetch(token: &str) -> Result<EmojiListResponse, EmojiListError> {
         .await
         .map_err(EmojiListError::ResponseUndeserializable)
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[tokio::test]
+    async fn invalid_token_error() {
+        let invalid_token = "invalid!\n";
+        let result = fetch(invalid_token).await;
+        assert!(result.is_err());
+    }
+}
