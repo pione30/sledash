@@ -8,7 +8,7 @@ use tokio::task;
 use indicatif::{ProgressBar, ProgressStyle};
 use regex::RegexSet;
 
-use slack_emoji_darkmode_shader::{converter, emoji_list};
+use sledash::{converter, emoji_list};
 
 #[tokio::main]
 async fn main() {
