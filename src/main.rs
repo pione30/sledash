@@ -30,7 +30,9 @@ async fn main() {
         .create(emoji_save_directory)
         .expect("the directory should be created when recursive mode is enabled");
 
-    let response = emoji_list::fetch(&token).await;
+    let response = emoji_list::fetch(&token).await.unwrap_or_else(|error| {
+        panic!("emoji_list::fetch failed: {}", error);
+    });
     if !response.ok {
         eprintln!(
             "Error is returned from emoji.list API: {}",
@@ -40,9 +42,6 @@ async fn main() {
         );
         return;
     }
-
-    // HTTP request client
-    let client = reqwest::Client::new();
 
     let emoji = response
         .emoji
@@ -64,6 +63,9 @@ async fn main() {
 
     emoji_progress_bar.set_style(progress_style.clone());
     emoji_progress_bar.set_message("emoji");
+
+    // HTTP request client
+    let client = reqwest::Client::new();
 
     task::spawn(async move {
         for (emoji_name, emoji_url) in &emoji {
