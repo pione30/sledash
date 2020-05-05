@@ -1,6 +1,19 @@
 use reqwest::{header, Client};
 use serde::Deserialize;
 use std::collections::HashMap;
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+pub enum EmojiListError {
+    #[error("invalid token was passed: {0}")]
+    InvalidTokenPassed(header::InvalidHeaderValue),
+    #[error("reqwest client couldn't be built: {0}")]
+    ClientBuildFailed(reqwest::Error),
+    #[error("API request failed: URL: {url}, HTTP status: {status}")]
+    APIRequestFailed { url: String, status: String },
+    #[error("the response body is not in JSON format or it cannot be properly deserialized: {0}")]
+    ResponseUndeserializable(reqwest::Error),
+}
 
 #[derive(Deserialize, Debug)]
 pub struct EmojiListResponse {
@@ -9,18 +22,18 @@ pub struct EmojiListResponse {
     pub error: Option<String>,
 }
 
-pub async fn fetch(token: &str) -> Result<EmojiListResponse, String> {
+pub async fn fetch(token: &str) -> Result<EmojiListResponse, EmojiListError> {
     let mut headers = header::HeaderMap::new();
     headers.insert(
         header::AUTHORIZATION,
         header::HeaderValue::from_str(format!("Bearer {}", token).as_str())
-            .map_err(|error| format!("Invalid token was passed: {}", error))?,
+            .map_err(EmojiListError::InvalidTokenPassed)?,
     );
 
     let client = Client::builder()
         .default_headers(headers)
         .build()
-        .map_err(|error| format!("reqwest client couldn't be built: {}", error))?;
+        .map_err(EmojiListError::ClientBuildFailed)?;
 
     let response = client
         .get("https://slack.com/api/emoji.list")
@@ -37,13 +50,11 @@ pub async fn fetch(token: &str) -> Result<EmojiListResponse, String> {
                 |status| status.as_str().to_owned(),
             );
 
-            format!("API response error: URL: {}, HTTP status: {}", url, status)
+            EmojiListError::APIRequestFailed { url, status }
         })?;
 
-    response.json::<EmojiListResponse>().await.map_err(|error| {
-        format!(
-            "the response body is not in JSON format or it cannot be properly deserialized: {}",
-            error
-        )
-    })
+    response
+        .json::<EmojiListResponse>()
+        .await
+        .map_err(EmojiListError::ResponseUndeserializable)
 }
