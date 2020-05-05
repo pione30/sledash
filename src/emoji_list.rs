@@ -15,6 +15,8 @@ pub enum EmojiListError {
     ResponseUndeserializable(reqwest::Error),
 }
 
+/// Represents a response from the Slack emoji.list Web API.
+/// Refer to the [API documents](https://api.slack.com/methods/emoji.list) for more details.
 #[derive(Deserialize, Debug)]
 pub struct EmojiListResponse {
     pub ok: bool,
@@ -22,6 +24,11 @@ pub struct EmojiListResponse {
     pub error: Option<String>,
 }
 
+/// Given a valid access token with `emoji:read` scope granted, try to fetch an [`EmojiListResponse`](struct.EmojiListResponse.html).
+///
+/// # Errors
+///
+/// This method fails whenever any error occurs while making request and getting response from the Slack Web API.
 pub async fn fetch(token: &str) -> Result<EmojiListResponse, EmojiListError> {
     let mut headers = header::HeaderMap::new();
     headers.insert(
