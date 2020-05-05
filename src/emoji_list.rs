@@ -1,7 +1,22 @@
 use reqwest::{header, Client};
 use serde::Deserialize;
 use std::collections::HashMap;
+use thiserror::Error;
 
+#[derive(Error, Debug)]
+pub enum EmojiListError {
+    #[error("invalid token was passed: {0}")]
+    InvalidTokenPassed(header::InvalidHeaderValue),
+    #[error("reqwest client couldn't be built: {0}")]
+    ClientBuildFailed(reqwest::Error),
+    #[error("API request failed: URL: {url}, HTTP status: {status}")]
+    APIRequestFailed { url: String, status: String },
+    #[error("the response body is not in JSON format or it cannot be properly deserialized: {0}")]
+    ResponseUndeserializable(reqwest::Error),
+}
+
+/// Represents a response from the Slack emoji.list Web API.
+/// Refer to the [API documents](https://api.slack.com/methods/emoji.list) for more details.
 #[derive(Deserialize, Debug)]
 pub struct EmojiListResponse {
     pub ok: bool,
@@ -9,24 +24,29 @@ pub struct EmojiListResponse {
     pub error: Option<String>,
 }
 
-pub async fn fetch(token: &str) -> EmojiListResponse {
+/// Given a valid access token with `emoji:read` scope granted, try to fetch an [`EmojiListResponse`](struct.EmojiListResponse.html).
+///
+/// # Errors
+///
+/// This method fails whenever any error occurs while making request and getting response from the Slack Web API.
+pub async fn fetch(token: &str) -> Result<EmojiListResponse, EmojiListError> {
     let mut headers = header::HeaderMap::new();
     headers.insert(
         header::AUTHORIZATION,
         header::HeaderValue::from_str(format!("Bearer {}", token).as_str())
-            .expect("Bearer token should be a valid header value"),
+            .map_err(EmojiListError::InvalidTokenPassed)?,
     );
 
     let client = Client::builder()
         .default_headers(headers)
         .build()
-        .expect("Client should be built");
+        .map_err(EmojiListError::ClientBuildFailed)?;
 
     let response = client
         .get("https://slack.com/api/emoji.list")
         .send()
         .await
-        .unwrap_or_else(|error| {
+        .map_err(|error| {
             let url = error.url().map_or_else(
                 || "URL not found.".to_string(),
                 |url| url.as_str().to_owned(),
@@ -37,11 +57,23 @@ pub async fn fetch(token: &str) -> EmojiListResponse {
                 |status| status.as_str().to_owned(),
             );
 
-            panic!("API response error: URL: {}, HTTP status: {}", url, status);
-        });
+            EmojiListError::APIRequestFailed { url, status }
+        })?;
 
     response
         .json::<EmojiListResponse>()
         .await
-        .expect("The response body should be in JSON format or be properly deserialized")
+        .map_err(EmojiListError::ResponseUndeserializable)
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[tokio::test]
+    async fn invalid_token_error() {
+        let invalid_token = "invalid!\n";
+        let result = fetch(invalid_token).await;
+        assert!(result.is_err());
+    }
 }
