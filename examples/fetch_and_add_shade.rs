@@ -30,9 +30,12 @@ async fn main() {
         .create(emoji_save_directory)
         .expect("the directory should be created when recursive mode is enabled");
 
-    let response = emoji_list::fetch(&token).await.unwrap_or_else(|error| {
-        panic!("emoji_list::fetch failed: {}", error);
-    });
+    let response = emoji_list::fetch(&token).await;
+    if let Err(error) = response {
+        eprintln!("emoji_list::fetch failed: {}", error);
+        return;
+    };
+    let response = response.unwrap();
     if !response.ok {
         eprintln!(
             "Error is returned from emoji.list API: {}",
