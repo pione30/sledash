@@ -3,22 +3,22 @@ use thiserror::Error;
 #[derive(Error, Debug)]
 pub enum ConverterError {
     #[error("failed to read image from the file: {0}")]
-    ReadImageFileFailed(magickwand::ExceptionType),
+    ReadImageFileFailed(sledash_magickwand::ExceptionType),
     #[error("failed to set Pixel color to {color}: {exception_type}")]
     PixelSetColorFailed {
-        exception_type: magickwand::ExceptionType,
+        exception_type: sledash_magickwand::ExceptionType,
         color: String,
     },
     #[error("failed to set image background color: {0}")]
-    SetImageBackgroundColorFailed(magickwand::ExceptionType),
+    SetImageBackgroundColorFailed(sledash_magickwand::ExceptionType),
     #[error("failed to shadow image: {0}")]
-    ShadowImageFailed(magickwand::ExceptionType),
+    ShadowImageFailed(sledash_magickwand::ExceptionType),
     #[error("failed to reset image page: {0}")]
-    ResetImagePageFailed(magickwand::ExceptionType),
+    ResetImagePageFailed(sledash_magickwand::ExceptionType),
     #[error("failed to compose image gravity: {0}")]
-    ComposeImageGravityFailed(magickwand::ExceptionType),
+    ComposeImageGravityFailed(sledash_magickwand::ExceptionType),
     #[error("failed to write images to the file: {0}")]
-    WriteImagesFileFailed(magickwand::ExceptionType),
+    WriteImagesFileFailed(sledash_magickwand::ExceptionType),
 }
 
 /// Adds a shadow to the image specified with `emoji_path`.
@@ -28,10 +28,10 @@ pub enum ConverterError {
 /// This method fails if any of the magickwand methods returns an error.
 pub fn add_shade(emoji_path: &std::path::Path) -> Result<(), ConverterError> {
     // wand to be taken by all the MagickWandy APIs
-    let mut wand = magickwand::Wand::new();
+    let mut wand = sledash_magickwand::Wand::new();
 
     {
-        let mut input_emoji = magickwand::File::new(&emoji_path.to_string_lossy(), "rb");
+        let mut input_emoji = sledash_magickwand::File::new(&emoji_path.to_string_lossy(), "rb");
 
         wand.magick_read_image_file(&mut input_emoji)
             .map_err(ConverterError::ReadImageFileFailed)?;
@@ -40,7 +40,7 @@ pub fn add_shade(emoji_path: &std::path::Path) -> Result<(), ConverterError> {
     wand.magick_reset_iterator();
 
     // Pixel set its color to white
-    let mut pixel_white = magickwand::Pixel::new();
+    let mut pixel_white = sledash_magickwand::Pixel::new();
     pixel_white
         .pixel_set_color("white")
         .map_err(|exception_type| ConverterError::PixelSetColorFailed {
@@ -66,13 +66,13 @@ pub fn add_shade(emoji_path: &std::path::Path) -> Result<(), ConverterError> {
 
         wand.magick_composite_image_gravity(
             &shadow_clone,
-            magickwand::CompositeOperator::DstOverCompositeOp,
-            magickwand::GravityType::CenterGravity,
+            sledash_magickwand::CompositeOperator::DstOverCompositeOp,
+            sledash_magickwand::GravityType::CenterGravity,
         )
         .map_err(ConverterError::ComposeImageGravityFailed)?;
     }
 
-    let mut output_emoji = magickwand::File::new(&emoji_path.to_string_lossy(), "wb");
+    let mut output_emoji = sledash_magickwand::File::new(&emoji_path.to_string_lossy(), "wb");
     // *images* to deal with gif animations
     wand.magick_write_images_file(&mut output_emoji)
         .map_err(ConverterError::WriteImagesFileFailed)?;
