@@ -2,6 +2,9 @@
 
 ## Sledash
 
+![](assets/LGTM-dark-background.png)
+![](assets/LGTM-shadow-dark-background.png)
+
 Sledash is an abbreviation for *Slack Emoji Darkmode Shader*.
 
 Fetch emoji lists from your Slack workspace and add white shades for better visibilities in the darkmode.
