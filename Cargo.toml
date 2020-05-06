@@ -9,7 +9,7 @@ repository = "https://github.com/pione30/sledash"
 readme = "README.md"
 categories = ["command-line-utilities"]
 keywords = ["slack", "emoji", "imagemagick"]
-exclude = ["examples/*", "tests/*"]
+exclude = ["assets/*", "examples/*", "tests/*"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -21,7 +21,7 @@ serde_json = "1.0"
 
 thiserror = "1.0"
 
-sledash-magickwand = { path = "./sledash-magickwand" }
+sledash-magickwand = { path = "./sledash-magickwand", version = "0.1.0" }
 
 [dev-dependencies]
 indicatif = "0.14"

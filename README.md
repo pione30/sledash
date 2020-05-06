@@ -1,3 +1,5 @@
+[![crates.io](https://img.shields.io/crates/v/sledash.svg)](https://crates.io/crates/sledash)
+[![docs.rs](https://docs.rs/sledash/badge.svg)](https://docs.rs/sledash)
 ![](https://github.com/pione30/sledash/workflows/Continuous%20integration/badge.svg)
 
 ## Sledash

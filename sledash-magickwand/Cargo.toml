@@ -12,4 +12,4 @@ categories = ["command-line-utilities"]
 
 [dependencies]
 
-sledash-magickwand-bindgen = { path = "../sledash-magickwand-bindgen" }
+sledash-magickwand-bindgen = { path = "../sledash-magickwand-bindgen", version = "0.1.0" }
