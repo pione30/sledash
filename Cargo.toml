@@ -21,7 +21,7 @@ serde_json = "1.0"
 
 thiserror = "1.0"
 
-sledash-magickwand = { path = "./sledash-magickwand" }
+sledash-magickwand = { path = "./sledash-magickwand", version = "0.1.0" }
 
 [dev-dependencies]
 indicatif = "0.14"
