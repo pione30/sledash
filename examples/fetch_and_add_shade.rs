@@ -1,7 +1,7 @@
 use std::convert::TryInto;
 use std::env;
 use std::fs::DirBuilder;
-use std::io::Write;
+use std::io::{BufWriter, Write};
 use std::path::Path;
 use tokio::task;
 
@@ -124,10 +124,10 @@ async fn main() {
                         error
                     ));
                 }
-                let mut file = file.unwrap();
+                let mut writer = BufWriter::new(file.unwrap());
 
                 // save emoji bytes
-                if let Err(error) = file.write_all(bytes.as_ref()) {
+                if let Err(error) = writer.write_all(bytes.as_ref()) {
                     return Err(format!(
                         "Failed to write bytes to file {}: {}",
                         &emoji_save_path.display(),
