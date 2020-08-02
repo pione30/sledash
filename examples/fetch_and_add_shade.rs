@@ -115,28 +115,9 @@ async fn main() {
             let emoji_save_path = Path::new(emoji_save_directory).join(emoji_filename);
 
             // saving emoji to the file is a heavy task
-            if let Err(message) = task::block_in_place(|| {
-                let file = std::fs::File::create(&emoji_save_path);
-                if let Err(error) = file {
-                    return Err(format!(
-                        "Failed to create emoji file {}: {}",
-                        &emoji_save_path.display(),
-                        error
-                    ));
-                }
-                let mut writer = BufWriter::new(file.unwrap());
-
-                // save emoji bytes
-                if let Err(error) = writer.write_all(bytes.as_ref()) {
-                    return Err(format!(
-                        "Failed to write bytes to file {}: {}",
-                        &emoji_save_path.display(),
-                        error
-                    ));
-                }
-
-                Ok(())
-            }) {
+            if let Err(message) =
+                task::block_in_place(|| save_emoji(&emoji_save_path, bytes.as_ref()))
+            {
                 eprintln!("{}", message);
                 continue;
             }
@@ -163,4 +144,28 @@ async fn main() {
     // magickwand::magick_wand_terminus();
 
     println!("emojis are saved under {} directory.", emoji_save_directory);
+}
+
+fn save_emoji(path: &Path, bytes: &[u8]) -> Result<(), String> {
+    let file = std::fs::File::create(path);
+    if let Err(error) = file {
+        return Err(format!(
+            "Failed to create emoji file {}: {}",
+            path.display(),
+            error
+        ));
+    }
+
+    let mut writer = BufWriter::new(file.unwrap());
+
+    // save emoji bytes
+    if let Err(error) = writer.write_all(bytes) {
+        return Err(format!(
+            "Failed to write bytes to file {}: {}",
+            path.display(),
+            error
+        ));
+    }
+
+    Ok(())
 }

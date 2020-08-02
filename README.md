@@ -9,11 +9,11 @@
 
 Sledash is an abbreviation for *Slack Emoji Darkmode Shader*.
 
-Fetch emoji lists from your Slack workspace and add white shades for better visibilities in the darkmode.
+This crate fetchs emoji lists from your Slack workspace and add white shades for better visibilities in the darkmode.
 
-Set `SLACK_APP_ACCESS_TOKEN` environment variable to your Slack OAuth Access Token with `emoji:read` scope granted.
+To run the example, set `SLACK_APP_ACCESS_TOKEN` environment variable to your Slack OAuth Access Token with `emoji:read` scope granted.
 
-WIP: As of now, adding the shades to gif animations does not work well (some wierd animations will be generated.)
+WIP: As of now, adding the shades to gif animations does not work so well (some wierd animations will be generated.)
 
 ## Requirements
 
