@@ -13,8 +13,8 @@ jobs:
       - name: Install ImageMagick 7
         run: |
           cd /tmp
-          wget https://imagemagick.org/download/releases/ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz
-          tar xvzf ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz
+          wget https://imagemagick.org/download/releases/ImageMagick-${IMAGEMAGICK_VERSION}.tar.xz
+          tar Jxvf ImageMagick-${IMAGEMAGICK_VERSION}.tar.xz
           cd ImageMagick-${IMAGEMAGICK_VERSION}
           ./configure
           make
